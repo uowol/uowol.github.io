@@ -2,7 +2,7 @@
 layout: post
 title:  "통계를 배웠지만 개발이 하고싶어"
 date:   2020-11-12 10:41:36 +0530
-categories: Talk 엄마 싸랑해요
+categories: Talk
 ---
 ## # 1
 고등학교에선 프로그래밍. 대학교에선 통계? 
