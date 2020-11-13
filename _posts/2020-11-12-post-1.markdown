@@ -1,7 +1,8 @@
 ---
 layout: post
-title:  "통계를 배웠지만 개발이 하고싶어"
-description: 에베베베베베베
+title:  "통계를 배우지만 개발이 하고싶어"
+description: 첫 블로그 첫 글! 쨕 쨕 쨕 쨕
+date: 2020-11-12 20:44:30 +0900
 categories: Talk
 ---
 ### # 1
