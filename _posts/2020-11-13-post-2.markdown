@@ -1,0 +1,12 @@
+---
+layout: post
+title:  "Jekyll에 포스팅하는 방법"
+categories: Talk
+---
+어렵다 증말...
+
+![texture theme preview](https://media.discordapp.net/attachments/514412058729644033/528932551457243141/unknown.png)
+
+[jekyll-docs]: https://jekyllrb.com/docs/home
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-talk]: https://talk.jekyllrb.com/
