@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "통계를 배웠지만 개발이 하고싶어"
-date:   2020-11-12 10:41:36 +0530
+description: 에베베베베베베
 categories: Talk
 ---
 ## # 1
