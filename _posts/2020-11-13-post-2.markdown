@@ -24,11 +24,11 @@ Github에서 페이지를 띄워주는데 페이지 플랫폼을 Jekyll에서 �
 2. 마크다운에서도 HTML의 태그들이 사용 가능하다. (ex: image, br, small...)
 
 3. 진심으로 이렇게 하는게 맞는지 의문이지만, 아무도 안알려주니 누군가 지적하기 전까진 이렇게 포스팅할 것 같다.
-<img src="/assets/imgs/now_working.png" width="700px" height="400px" title="px(픽셀) 크기 설정" alt="RubberDuck"/>
+<img src="/assets/imgs/post_2/now_working.png" width="700px" height="400px" title="내가 일하는 방법" alt="now_working..."/>
 
-4. 위 사진에서 보이듯 파일 명에 날짜를 기입해줘야 한다. ~~귀찮아요, 조금, 많이~~
+4. 위 사진에서 보이듯 파일 명에 날짜를 기입해줘야 한다. ~~귀찮아요, 조금,~~
 
-5. 느끼셨을지 모르지만. 주인장이 리틀몽키쏘울을 소소히 드러내곤한다.
+5. 느끼셨을지 모르지만. 필자가 자신의 리틀몽키쏘울을 숨기지 않는다.
 
 ---
 
