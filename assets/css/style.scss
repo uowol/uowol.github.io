@@ -1,6 +1,9 @@
 ---
 ---
 
+img{
+    object-fit: contain
+}
 @import "theme";
 
  {%- if site.texture.showPicker -%}
