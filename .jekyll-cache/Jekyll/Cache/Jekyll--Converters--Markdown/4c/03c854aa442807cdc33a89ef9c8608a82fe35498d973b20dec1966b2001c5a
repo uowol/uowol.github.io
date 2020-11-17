@@ -1,9 +1,0 @@
-I"_<p>포스팅에 사용되는 이미지는 <code class="language-plaintext highlighter-rouge">&lt;img&gt;</code> 태그를 사용하여 나타내고 있습니다.</p>
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">&lt;img&gt;</code> 태그를 사용하면 이미지 크기를 쉽게 조정할 수 있어요!</li>
-</ul>
-
-<p>그러나, 크기를 임의로 설정할 경우 설정된 크기를 우선시한 나머지 이미지의 비율이 깨져버리는 경우가 종종 있습니다.</p>
-
-<p><img src="/assets/imgs/post_6/desk_short.jpg" alt="shrinked_desk" title="오그라든 책상" /></p>
-:ET
