@@ -1,0 +1,104 @@
+I"X"<h2 id="mathjax">Mathjax</h2>
+<p>MathJax를 사용하면 사이트 내에서 여러 수학 수식들을 사용할 수 있습니다.</p>
+
+<h2 id="mathjax-적용하기">Mathjax 적용하기</h2>
+
+<h3 id="마크다운-엔진-변경">마크다운 엔진 변경</h3>
+<p><code class="language-plaintext highlighter-rouge">_config.yml</code> 파일의 내용을 아래와 같이 수정</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Conversion</span>
+<span class="na">markdown</span><span class="pi">:</span> <span class="s">kramdown</span>
+<span class="na">highlighter</span><span class="pi">:</span> <span class="s">rouge</span>
+<span class="na">lsi</span><span class="pi">:</span> <span class="no">false</span>
+<span class="na">excerpt_separator</span><span class="pi">:</span> <span class="s2">"</span><span class="se">\n\n</span><span class="s">"</span>
+<span class="na">incremental</span><span class="pi">:</span> <span class="no">false</span>
+</code></pre></div></div>
+
+<h3 id="mathjax_supporthtml-파일-생성"><code class="language-plaintext highlighter-rouge">mathjax_support.html</code> 파일 생성</h3>
+<p><code class="language-plaintext highlighter-rouge">_includes</code> 디렉토리에 <code class="language-plaintext highlighter-rouge">mathjax_support.html</code> 파일 생성 후 아래 내용 입력</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/x-mathjax-config"</span><span class="nt">&gt;</span>
+<span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Config</span><span class="p">({</span>
+    <span class="na">TeX</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">equationNumbers</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">autoNumber</span><span class="p">:</span> <span class="dl">"</span><span class="s2">AMS</span><span class="dl">"</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="na">tex2jax</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">inlineMath</span><span class="p">:</span> <span class="p">[</span> <span class="p">[</span><span class="dl">'</span><span class="s1">$</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">$</span><span class="dl">'</span><span class="p">]</span> <span class="p">],</span>
+    <span class="na">displayMath</span><span class="p">:</span> <span class="p">[</span> <span class="p">[</span><span class="dl">'</span><span class="se">\\</span><span class="s1">[</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="se">\\</span><span class="s1">]</span><span class="dl">'</span><span class="p">]</span> <span class="p">],</span>
+    <span class="na">processEscapes</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+<span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Register</span><span class="p">.</span><span class="nx">MessageHook</span><span class="p">(</span><span class="dl">"</span><span class="s2">Math Processing Error</span><span class="dl">"</span><span class="p">,</span><span class="kd">function</span> <span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+	  <span class="nx">alert</span><span class="p">(</span><span class="dl">"</span><span class="s2">Math Processing Error: </span><span class="dl">"</span><span class="o">+</span><span class="nx">message</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+	<span class="p">});</span>
+<span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Register</span><span class="p">.</span><span class="nx">MessageHook</span><span class="p">(</span><span class="dl">"</span><span class="s2">TeX Jax - parse error</span><span class="dl">"</span><span class="p">,</span><span class="kd">function</span> <span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+	  <span class="nx">alert</span><span class="p">(</span><span class="dl">"</span><span class="s2">Math Processing Error: </span><span class="dl">"</span><span class="o">+</span><span class="nx">message</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+	<span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">async</span>
+  <span class="na">src=</span><span class="s">"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<h3 id="_layoutsdefaulthtml-파일의-head-부분에-아래-내용-삽입"><code class="language-plaintext highlighter-rouge">_layouts</code>/<code class="language-plaintext highlighter-rouge">default.html</code> 파일의 <code class="language-plaintext highlighter-rouge">&lt;head&gt;</code> 부분에 아래 내용 삽입</h3>
+<ul>
+  <li>저 같은 경우 <code class="language-plaintext highlighter-rouge">default.html</code>대신 <code class="language-plaintext highlighter-rouge">post.html</code> 파일에 삽입하였습니다.</li>
+</ul>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// % 앞에 '　' 문자가 들어있습니다. 제거하면 실행되어버려서 넣어놨으니 사용하실 땐 제거해주세요.
+
+{　% if page.use_math %}
+  {　% include mathjax_support.html %}
+{　% endif %}
+</code></pre></div></div>
+
+<h3 id="yaml-front-matter-설정">YAML front-matter 설정</h3>
+<p>수학식을 표시할 포스트의 front-matter에 <code class="language-plaintext highlighter-rouge">use_math: true</code> 적용</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="na">title</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Jekyll</span><span class="nv"> </span><span class="s">Github</span><span class="nv"> </span><span class="s">블로그에</span><span class="nv"> </span><span class="s">수학</span><span class="nv"> </span><span class="s">수식</span><span class="nv"> </span><span class="s">집어넣기"</span>
+<span class="na">tags</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">Blog</span>
+  <span class="pi">-</span> <span class="s">MathJax</span>
+  <span class="pi">-</span> <span class="s">Jekyll</span>
+  <span class="pi">-</span> <span class="s">LaTeX</span>
+<span class="na">use_math</span><span class="pi">:</span> <span class="no">true</span>
+<span class="nn">---</span>
+</code></pre></div></div>
+
+<h2 id="mathjax-활용하기">Mathjax 활용하기</h2>
+
+<p>와… 진짜 생각보다 많아요. 자세한 것은 <a href="https://math.meta.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference/">여기</a>에서!</p>
+
+<h3 id="표현-방법">표현 방법</h3>
+<ol>
+  <li>inline 수식 표현
+    <ul>
+      <li>수식 앞 뒤에 <code class="language-plaintext highlighter-rouge">$</code>를 붙인다. <code class="language-plaintext highlighter-rouge">$ ... $</code></li>
+      <li><code class="language-plaintext highlighter-rouge">$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$</code></li>
+      <li>$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$ <br /><br /></li>
+    </ul>
+  </li>
+  <li>displayed 수식 표현
+    <ul>
+      <li>수식 앞 뒤에 <code class="language-plaintext highlighter-rouge">$$</code>를 붙인다. <code class="language-plaintext highlighter-rouge">$$ ... $$</code></li>
+      <li><code class="language-plaintext highlighter-rouge">$$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$</code></li>
+    </ul>
+  </li>
+</ol>
+
+\[\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}\]
+
+\[\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}\]
+
+<h3 id="그리스-문자-사용">그리스 문자 사용</h3>
+<p>다양한 그리스 문자를 사용할 수 있습니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$\alpha$, \beta, \mu, \gamma
+</code></pre></div></div>
+
+<h2 id="참조">참조</h2>
+<p><a href="https://ghdic.github.io/math/default/mathjax-%EB%AC%B8%EB%B2%95/">ghdic-mathjax 깃헙블로그 적용 및 문법</a></p>
+
+:ET

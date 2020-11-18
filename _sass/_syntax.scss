@@ -8,7 +8,7 @@ div.highlighter-rouge {
 }
 
 .highlight {
-	background-color: #f4f4f4;
+	background-color: #263238;
 }
 
 div.highlight {
@@ -19,5 +19,8 @@ pre.highlight, code {
 	font-family: 'Consolas', Menlo, monospace;
 	line-height: 1.4em;
 	tab-size: 4;
-	background-color: #f4f4f4;
+	background-color: #263238;
+	border-radius: 4px;
+	padding:1px 4px;
+	color: #c0c0c0;
 }
