@@ -4,6 +4,11 @@
 img{
     object-fit: contain
 }
+
+.foo table{
+  width:100%;
+}
+
 @import "theme";
 
  {%- if site.texture.showPicker -%}
