@@ -1,0 +1,24 @@
+I"L<h3 id="블로그에-수식-적용하기">블로그에 수식 적용하기</h3>
+<p>블로그에 수식 적용하기는 다음 포스팅을 참고해주세요. <a href="/posts/post-7">여기</a></p>
+
+<p><a href="/posts/post-3">이전 포스팅</a>에서 각 쇼필몰마다 같은 제품이라도 가격이 다르게 책정된다는 것을 확인하였습니다.</p>
+
+<p>그 과정에서 가구 전문 쇼핑몰이 타 쇼핑몰에 비해 가구 할인율이 높은 것을 발견하고 다음과 같은 하나의 가설을 세우게 되었습니다.</p>
+
+<hr />
+
+<h3 id="첫-번째-가설">첫 번째 가설</h3>
+<p>“각 가구들에 대해 일반 쇼핑몰과 가구 전문 쇼필몰이 가격을 비교해본다면, 일반 쇼핑몰이 더 비쌀 것이다.”</p>
+
+<p>이를 통계적으로 표현해보겠습니다.</p>
+<ul>
+  <li>X<sub>i</sub> : 일반 쇼필몰에서의 i번째 가구의 가격</li>
+  <li>Y<sub>i</sub> : 가구 전문 쇼필몰에서의 i번째 가구의 가격</li>
+  <li>D<sub>i</sub> = X<sub>i</sub> - Y<sub>i</sub></li>
+  <li>귀무 가설 H<sub>0</sub> : E(D<sub>i</sub>) = \mu_{a}</li>
+</ul>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>실험이 우선이기에 통계적 지식에 대해선 간단히 서술만 하고 넘어가겠습니다. 
+</code></pre></div></div>
+
+:ET
