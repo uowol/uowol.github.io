@@ -1,6 +1,5 @@
-I"�	<h2 id="모평균에-관한-추론">모평균에 관한 추론</h2>
+I"{
 <h3 id="모평균의-신뢰구간">모평균의 신뢰구간</h3>
-
 <ol>
   <li>모표준편차 $\sigma$가 기지인 경우,
     <ul>
@@ -39,37 +38,33 @@
 <table>
   <thead>
     <tr>
-      <th> </th>
-      <th>유의확률</th>
-      <th>유의수준 $\alpha$의 기각역</th>
+      <th style="text-align: center"> </th>
+      <th style="text-align: center">유의확률</th>
+      <th style="text-align: center">유의수준 $\alpha$의 기각역</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>$H_1:\mu \gt \mu_0$</td>
-      <td>$P=P(T \geqq t)$</td>
-      <td>$t \geqq t_\alpha (n-1)$</td>
+      <td style="text-align: center">$H_1:\mu \gt \mu_0$</td>
+      <td style="text-align: center">$P=P(T \geqq t)$</td>
+      <td style="text-align: center">$t \geqq t_\alpha (n-1)$</td>
     </tr>
     <tr>
-      <td>$H_1:\mu \lt \mu_0$</td>
-      <td>$P=P(T \leqq t)$</td>
-      <td>$t \leqq - t_\alpha (n-1)$</td>
+      <td style="text-align: center">$H_1:\mu \lt \mu_0$</td>
+      <td style="text-align: center">$P=P(T \leqq t)$</td>
+      <td style="text-align: center">$t \leqq - t_\alpha (n-1)$</td>
     </tr>
     <tr>
-      <td>$H_1:\mu \neq \mu_0$</td>
-      <td>$P=P(\vertT\vert \geqq \vert t \vert)$</td>
-      <td>$\vert t \vert \geqq t_{\alpha/2}(n-1)$</td>
+      <td style="text-align: center">$H_1:\mu \neq \mu_0$</td>
+      <td style="text-align: center">$P=P(\vert T \vert \geqq \vert t \vert)$</td>
+      <td style="text-align: center">$\vert t \vert \geqq t_{\alpha/2}(n-1)$</td>
     </tr>
   </tbody>
 </table>
 
 <p>만약 유의확률 $P$가 유의수준 $\alpha$보다 작다면, 충분히 유의하다고 할 수 있다.</p>
 
-<p>유의하다 = 귀무가설 $H_0$을 기각하기에 충분하다.</p>
-
-<hr />
-
-<h2 id="대응비교란">대응비교란?</h2>
+<p>✔ 유의하다 = 귀무가설 $H_0$을 기각하기에 충분하다.</p>
 
 <h2 id="참조">참조</h2>
 <ul>
