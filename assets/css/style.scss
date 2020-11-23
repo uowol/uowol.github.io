@@ -5,6 +5,15 @@ body > main > div > ul > li > .post-meta{
     padding: 10px;
 }
 
+.mbtablestyle {
+    border-collapse: collapse;
+
+    > table, td, th {
+        border: 1px solid black;
+        text-align: center;
+    }
+}
+
 img{
     object-fit: contain
 }
