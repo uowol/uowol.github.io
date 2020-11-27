@@ -1,0 +1,32 @@
+I"<h2 id="친구들-프로필사진-가져오기">친구들 프로필사진 가져오기</h2>
+<p>RESTAPI만 사용해서 진행하려고 했는데,</p>
+
+<p>날 가로막는 <del>그즈그튼</del> <strong>CORS</strong></p>
+
+<p>새벽 4시까지 CORS, Fetch API, 프로토콜 등을 공부하고나서야 원인이 보였습니다.</p>
+
+<p>자바스크립트는 기본적으로 브라우저에서 작동하며,</p>
+
+<p>서버에서 요청이 들어온 사이트를 신뢰한다는 답변을 보내지 않으면 에러가 나는 것으로 보입니다.</p>
+
+<p>그러나 카카오 API는 JavaScript API 역시 지원하고 있어 브라우저에선 REST API가 아닌 JavaScript API를 쓰는 것이 알맞아보입니다.</p>
+
+<p>오늘은 여기까지.</p>
+
+<script>
+const TOKEN = "RGFXKU1a4Ph1I8icJqsO0la8dcKfGe62OvDrGAopb1UAAAF2CtF4VQ"
+const userAction = async () => {
+  const response = await fetch('https://kauth.kakao.com/oauth/authorize?client_id='+"b0ced927e5fc9b17704e2cf109a061f8"+'&redirect_uri='+'https://uowol.github.io/oauth'+'&response_type=code',{
+    headers: {
+        Origin: "https://uowol.github.io"
+    }
+    
+  });
+  alert(response)
+  const myJson = await response.json(); //extract JSON from the http response
+  // do something with myJson
+}
+userAction()
+</script>
+
+:ET

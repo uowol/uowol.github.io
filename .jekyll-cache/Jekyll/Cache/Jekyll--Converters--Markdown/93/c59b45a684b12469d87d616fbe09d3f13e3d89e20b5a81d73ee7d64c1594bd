@@ -1,0 +1,16 @@
+I"�<h2 id="친구들-프로필사진-가져오기">친구들 프로필사진 가져오기</h2>
+
+<script>
+const TOKEN = "RGFXKU1a4Ph1I8icJqsO0la8dcKfGe62OvDrGAopb1UAAAF2CtF4VQ"
+const userAction = async () => {
+  const response = await fetch('https://uowol.github.io'
+  );
+  const myJson = await response.json(); //extract JSON from the http response
+  
+  console.log(myJson)
+  // do something with myJson
+}
+userAction()
+</script>
+
+:ET
