@@ -1,0 +1,33 @@
+I"Y<h2 id="방향성">방향성</h2>
+<ul>
+  <li>데이터는 제공받아 데이터분석에 집중하는 방향으로 진행해보려 합니다.
+    <ul>
+      <li>데이터분석과 데이터가공을 함께 진행하려하니 이도저도 아니게되었었어요.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="후보군">후보군</h2>
+<ol>
+  <li>카카오톡 데이터분석
+    <ul>
+      <li><a href="https://developers.kakao.com/">카카오API</a></li>
+    </ul>
+  </li>
+  <li>구글 포토 데이터분석
+    <ul>
+      <li><a href="https://developers.google.com/photos">구글 포토 API</a></li>
+      <li>사진 정보를 불러와 위치를 지도에 띄워볼까합니다.</li>
+      <li>가능하다면 인물 정보도 받아와 누구와 가장 많은 추억이 남아있는지 등도 이것저것 해보고싶네요.</li>
+    </ul>
+  </li>
+  <li>게임 데이터분석
+    <ul>
+      <li>가장 직관적인 프로젝트죠</li>
+      <li><a href="https://pokeapi.co/">포켓몬 API</a></li>
+      <li><a href="https://developer.riotgames.com/">리그오브레전드 API</a></li>
+    </ul>
+  </li>
+</ol>
+
+:ET
