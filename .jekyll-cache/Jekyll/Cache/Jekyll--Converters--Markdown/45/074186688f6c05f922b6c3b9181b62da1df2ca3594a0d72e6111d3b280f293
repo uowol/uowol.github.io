@@ -1,13 +1,4 @@
----
-layout: post
-title: 'Kakaotalk 데이터 가지고 놀기'
-description: '오늘 해볼 컨텐츠는 바로 ~'
-date: 2020-11-27 20:11:44 +0900
-categories:  Talk
----
-## 친구들 프로필사진 가져오기
-
-
+I"T<h2 id="친구들-프로필사진-가져오기">친구들 프로필사진 가져오기</h2>
 
 <script>
 const TOKEN = "RGFXKU1a4Ph1I8icJqsO0la8dcKfGe62OvDrGAopb1UAAAF2CtF4VQ"
@@ -21,3 +12,5 @@ const userAction = async () => {
 }
 userAction()
 </script>
+
+:ET
