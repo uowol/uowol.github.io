@@ -1,0 +1,61 @@
+I"�	<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>kakao API-login</title>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <script>
+        Kakao.init("cbfbe87181425dc740113e63a36a0321")
+        const REST_API_KEY = "b0ced927e5fc9b17704e2cf109a061f8"
+        const JS_KEY = "cbfbe87181425dc740113e63a36a0321"
+        const REDIRECT_URI = "http://127.0.0.1:4000/posts/post-14/login"
+    </script>
+</head>
+<body>
+    <script>
+        if(location.search.indexOf("?") != -1){
+            let [res, content] = location.search.substr(location.search.indexOf("?") + 1).split('=');
+            if(res == "error")
+                alert("로그인 실패, 다시 시도하십시오.")
+            else if(res == "code"){
+                const AUTHORIZE_CODE = content
+                alert(location.search.substr(location.search.indexOf("?") + 1))
+                let params = {
+                    grant_type: "authorization_code",
+                    client_id: REST_API_KEY,
+                    redirect_uri: REDIRECT_URI,
+                    code: AUTHORIZE_CODE
+                }
+                fetch("https://kauth.kakao.com/oauth/token", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+                    },
+                    body: JSON.stringify(params)
+                })
+            }
+        }
+    </script>
+    <img src="/assets/imgs/post_14/kakao_login_medium_narrow.png" alt="btn_kakao" onclick="login()" />
+    <script>
+        const login = async () => {
+            Kakao.Auth.authorize({
+                redirectUri: REDIRECT_URI
+            });
+        }
+    </script>
+</body>
+</html>
+<h2 id="친구들-프로필사진-가져오기">친구들 프로필사진 가져오기</h2>
+<p>RESTAPI만 사용해서 진행하려고 했는데,</p>
+
+<p>날 가로막는 <del>그즈그튼</del> <strong>CORS</strong></p>
+
+<p>새벽 4시까지 CORS, Fetch API, 프로토콜 등을 공부하고나서야 원인이 보였습니다.</p>
+
+<p>자바스크립트는 기본적으로 브라우저에서 작동하며,</p>
+
+<p>서버에서 요청이 들어온 사이트를 신뢰한다는 답변을 보내지 않으면 에러가 나는 것으로 보입니다.</p>
+
+<p>그러나 카카오 API는 JavaScript API 역시 지원하고 있어 브라우저에선 REST API가 아닌 JavaScript API를 쓰는 것이 알맞아보입니다.</p>
+:ET

@@ -1,0 +1,28 @@
+I"�<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>kakao API-login</title>
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <script>
+        Kakao.init("cbfbe87181425dc740113e63a36a0321")
+    </script>
+</head>
+<body>
+    <img src="/assets/imgs/post_14/kakao_login_medium_narrow.png" alt="btn_kakao" onclick="login()" />
+    <script>
+        const REST_API_KEY = "b0ced927e5fc9b17704e2cf109a061f8"
+        const JS_KEY = "cbfbe87181425dc740113e63a36a0321"
+        const REDIRECT_URI = "http://127.0.0.1:4000/posts/post-14"
+
+        const login = async () => {
+            Kakao.Auth.authorize({
+                redirectUri: REDIRECT_URI
+            });
+        }
+    </script>
+</body>
+</html>
+<h2 id="친구들-프로필사진-가져오기">친구들 프로필사진 가져오기</h2>
+<p>RESTAPI만 사용해서 진행하려고 했는데,</p>
+:ET
