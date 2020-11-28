@@ -1,7 +1,7 @@
-<html lang="en">
+I"Z<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>kakao API-login</title>
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <script>
@@ -23,8 +23,6 @@
             
             return form.join('&')
         }
-
-        let ACCESS_TOKEN
 
         if(location.search.indexOf("?") != -1){
         
@@ -49,30 +47,30 @@
                         'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
                     },
                     body: buildForm(params)
-                }).then(res => res.json())
-                .then(json => ACCESS_TOKEN = json.access_token)
+                }).then(res => console.log(res.json()))
             }
         }
     </script>
-    <a href="javascript:login()">
-        <img src="/assets/imgs/post_14/kakao_login_medium_narrow.png" alt="btn_kakao">
-    </a>
-    <a href="javascript:getProfile()">
-        <img src="/assets/imgs/post_14/kakao_login_medium_narrow.png" alt="btn_kakao">
-    </a>
+    <img src="/assets/imgs/post_14/kakao_login_medium_narrow.png" alt="btn_kakao" onclick="login()" />
     <script>
         const login = async () => {
             Kakao.Auth.authorize({
                 redirectUri: REDIRECT_URI
             });
         }
-        const getProfile = async () => {
-            fetch("https://kapi.kakao.com/v1/api/talk/profile",{
-                headers:{
-                    Authorization: "Bearer " + ACCESS_TOKEN
-                }
-            })
-        }
     </script>
 </body>
 </html>
+<h2 id="친구들-프로필사진-가져오기">친구들 프로필사진 가져오기</h2>
+<p>RESTAPI만 사용해서 진행하려고 했는데,</p>
+
+<p>날 가로막는 <del>그즈그튼</del> <strong>CORS</strong></p>
+
+<p>새벽 4시까지 CORS, Fetch API, 프로토콜 등을 공부하고나서야 원인이 보였습니다.</p>
+
+<p>자바스크립트는 기본적으로 브라우저에서 작동하며,</p>
+
+<p>서버에서 요청이 들어온 사이트를 신뢰한다는 답변을 보내지 않으면 에러가 나는 것으로 보입니다.</p>
+
+<p>그러나 카카오 API는 JavaScript API 역시 지원하고 있어 브라우저에선 REST API가 아닌 JavaScript API를 쓰는 것이 알맞아보입니다.</p>
+:ET

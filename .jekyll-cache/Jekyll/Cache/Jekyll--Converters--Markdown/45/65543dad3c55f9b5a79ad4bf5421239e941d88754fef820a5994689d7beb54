@@ -1,7 +1,8 @@
+I"�
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>kakao API-login</title>
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <script>
@@ -55,10 +56,10 @@
         }
     </script>
     <a href="javascript:login()">
-        <img src="/assets/imgs/post_14/kakao_login_medium_narrow.png" alt="btn_kakao">
+        <img src="/assets/imgs/post_14/kakao_login_medium_narrow.png" alt="btn_kakao" />
     </a>
     <a href="javascript:getProfile()">
-        <img src="/assets/imgs/post_14/kakao_login_medium_narrow.png" alt="btn_kakao">
+        <img src="/assets/imgs/post_14/kakao_login_medium_narrow.png" alt="btn_kakao" />
     </a>
     <script>
         const login = async () => {
@@ -76,3 +77,6 @@
     </script>
 </body>
 </html>
+<h2 id="친구들-프로필사진-가져오기">친구들 프로필사진 가져오기</h2>
+<p>RESTAPI만 사용해서 진행하려고 했는데,</p>
+:ET

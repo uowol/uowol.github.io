@@ -1,7 +1,7 @@
-<html lang="en">
+I"A	<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>kakao API-login</title>
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <script>
@@ -23,8 +23,6 @@
             
             return form.join('&')
         }
-
-        let ACCESS_TOKEN
 
         if(location.search.indexOf("?") != -1){
         
@@ -50,29 +48,20 @@
                     },
                     body: buildForm(params)
                 }).then(res => res.json())
-                .then(json => ACCESS_TOKEN = json.access_token)
+                .then(json => console.log(json))
             }
         }
     </script>
-    <a href="javascript:login()">
-        <img src="/assets/imgs/post_14/kakao_login_medium_narrow.png" alt="btn_kakao">
-    </a>
-    <a href="javascript:getProfile()">
-        <img src="/assets/imgs/post_14/kakao_login_medium_narrow.png" alt="btn_kakao">
-    </a>
+    <img src="/assets/imgs/post_14/kakao_login_medium_narrow.png" alt="btn_kakao" onclick="login()" />
     <script>
         const login = async () => {
             Kakao.Auth.authorize({
                 redirectUri: REDIRECT_URI
             });
         }
-        const getProfile = async () => {
-            fetch("https://kapi.kakao.com/v1/api/talk/profile",{
-                headers:{
-                    Authorization: "Bearer " + ACCESS_TOKEN
-                }
-            })
-        }
     </script>
 </body>
 </html>
+<h2 id="친구들-프로필사진-가져오기">친구들 프로필사진 가져오기</h2>
+<p>RESTAPI만 사용해서 진행하려고 했는데,</p>
+:ET
