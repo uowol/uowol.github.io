@@ -1,7 +1,8 @@
+I"=<h2 id="카카오톡-로그인--로그아웃">카카오톡 로그인 / 로그아웃</h2>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>kakao API-login</title>
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <script>
@@ -12,11 +13,11 @@
     </script>
 </head>
 <body id="body">
-    <a id='btn_login' href="javascript:login()">
-        <img src="/assets/imgs/post_14/kakao_login_medium_narrow.png" alt="btn_kakao">
+    <a id="btn_login" href="javascript:login()">
+        <img src="/assets/imgs/post_14/kakao_login_medium_narrow.png" alt="btn_kakao" />
     </a>
-    <a id='btn_logout' href="javascript:logout()" style="display:none">로그아웃</a><br>
-    <a id='btn_unlink' href="javascript:unlink()" style="display:none">카카오톡 연동 해제</a>
+    <a id="btn_logout" href="javascript:logout()" style="display:none">로그아웃</a><br />
+    <a id="btn_unlink" href="javascript:unlink()" style="display:none">카카오톡 연동 해제</a>
     <script>
         // Using this function for making a object to the fixed-params-data for Content-type:x-www-form-urlencoded
         const buildForm = data => {
@@ -93,10 +94,7 @@
                 url: '/v1/user/unlink',
                 success: function(response) {
                     alert('카카오톡 연동이 성공적으로 해제되었습니다.');
-                    btn_logout.style.display = 'none'
                     btn_unlink.style.display = 'none'
-                    btn_login.style.display = 'inline'
-                    Kakao.Auth.setAccessToken('')
                 },
                 fail: function(error) {
                     console.log(error);
@@ -106,3 +104,4 @@
     </script>
 </body>
 </html>
+:ET

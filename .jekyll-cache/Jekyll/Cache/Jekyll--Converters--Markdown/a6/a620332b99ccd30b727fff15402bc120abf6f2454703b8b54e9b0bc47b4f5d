@@ -1,9 +1,0 @@
-I"#<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-
-<script>
-    Kakao.init("cbfbe87181425dc740113e63a36a0321")
-</script>
-
-<h2 id="친구들-프로필사진-가져오기">친구들 프로필사진 가져오기</h2>
-<p>RESTAPI만 사용해서 진행하려고 했는데,</p>
-:ET
