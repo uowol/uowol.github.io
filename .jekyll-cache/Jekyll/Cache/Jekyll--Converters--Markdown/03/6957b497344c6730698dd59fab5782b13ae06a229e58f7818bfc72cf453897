@@ -1,4 +1,4 @@
-I"�<h2 id="카카오톡-대화-내용-가져오기">카카오톡 대화 내용 가져오기</h2>
+I"L'<h2 id="카카오톡-대화-내용-가져오기">카카오톡 대화 내용 가져오기</h2>
 <p><a href="posts/post-14">이전 포스팅</a>에서 서술한 것처럼 카카오 API에서는 대화 내용을 제공하지 않지만, 카카오톡 어플리케이션에서 대화내용을 추출할 수가 있습니다.</p>
 
 <h3 id="참조">참조</h3>
@@ -25,7 +25,6 @@
 코딩노예님이 uowol님을 초대하였습니다.
 [코딩노예] [오전 6:42] .
 [uowol] [오전 6:42] ㅎㅇㅎㅇ!
-[uowol] [오전 6:42] 반가워요 ㅎㅎㅋ
 [uowol] [오전 6:42] @-----&gt;
 </code></pre></div></div>
 
@@ -82,10 +81,81 @@
 
 <div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># R &gt; regularExpression.R</span><span class="w">
 </span><span class="n">...</span><span class="w">
-</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">readLines</span><span class="p">(</span><span class="n">PATH</span><span class="p">,</span><span class="w"> </span><span class="n">encoding</span><span class="o">=</span><span class="s2">"UTF-8"</span><span class="p">)</span><span class="w">
+</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">readLines</span><span class="p">(</span><span class="n">PATH</span><span class="p">,</span><span class="w"> </span><span class="n">encoding</span><span class="o">=</span><span class="s2">"UTF-8"</span><span class="p">)</span><span class="w"> </span><span class="c1"># 한국어를표시하기 위한 utf-8</span><span class="w">
 </span><span class="n">...</span><span class="w">
 </span></code></pre></div></div>
 
+<p>여기서 <code class="language-plaintext highlighter-rouge">readLines("파일의 경로")</code>함수는 파일의 내용을 줄 단위로 잘라 vector형태로 값을 반환합니다.</p>
+
+<p>예를 들어,</p>
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># test.text</span><span class="w">
+
+</span><span class="n">대충</span><span class="w"> </span><span class="n">A라는</span><span class="w"> </span><span class="n">내용</span><span class="w">
+</span><span class="n">대충</span><span class="w"> </span><span class="n">B라는</span><span class="w"> </span><span class="n">내용</span><span class="w">
+</span><span class="n">대충</span><span class="w"> </span><span class="n">C라는</span><span class="w"> </span><span class="n">내용</span><span class="w">
+</span></code></pre></div></div>
+<p>라는 파일을 읽는다면</p>
+
+<p>[“대충 A라는 내용”, “대충 B라는 내용”, “대충 C라는 내용”]의 vector가 만들어집니다.</p>
+
+<p>이를 활용하여 카카오톡 대화방을 긁어와보겠습니다.</p>
+
 <h3 id="정규표현식을-사용하여-대화-분리하기">정규표현식을 사용하여 대화 분리하기</h3>
+
+<p>긁어온 대화 내용을 보면 유형이 5가지로 나누어집니다.</p>
+
+<ol>
+  <li>
+    <p>————— 20XX년 XX월 XX일 X요일 —————</p>
+  </li>
+  <li>
+    <p>~님이 ~을 초대하였습니다.</p>
+  </li>
+  <li>
+    <p>~님이 나갔습니다.</p>
+  </li>
+  <li>
+    <p>[이름] [오전/오후 XX:XX] 내용</p>
+  </li>
+  <li>
+    <p>그냥 내용</p>
+    <ul>
+      <li>한 줄씩 긁어오다보니 여러 줄의 내용을 채팅했을 경우, 이렇게 한 줄씩 내용만 긁어와질 때가 있습니다.</li>
+      <li>이 때는 가장 최근에 메시지를 보낸 사람의 대화내용에 추가하면 됩니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>이제, 정규표현식을 R에서 사용하는 법을 간략하게 알아보겠습니다.</p>
+
+<p>훨씬 많은 활용법이 있지만 자세한 내용은 다음 포스팅에 다뤄보겠습니다.</p>
+
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 1. </span><span class="w">
+</span><span class="n">grep</span><span class="p">(</span><span class="n">RegExp</span><span class="p">,</span><span class="w"> </span><span class="n">vector</span><span class="p">)</span><span class="w">
+</span><span class="c1"># 벡터 내에 매개변수로 들어간 정규표현식이 포함된 문자열이 있다면 해당 위치를 반환합니다.</span><span class="w">
+</span><span class="c1"># 만약 여러 개가 부합한다면 여러 개의 위치를 반환합니다.</span><span class="w">
+</span><span class="c1"># value=TRUE를 매개변수로 넣는다면 위치가 아닌 해당 문자열을 반환합니다.</span><span class="w">
+
+</span><span class="c1"># 2.</span><span class="w">
+</span><span class="n">grepl</span><span class="p">(</span><span class="n">RegExp</span><span class="p">,</span><span class="w"> </span><span class="n">vector</span><span class="p">)</span><span class="w">
+</span><span class="c1"># 결과값이 위치가 아니라 TRUE/FALSE값으로 나옵니다.</span><span class="w">
+</span><span class="c1"># ex) True True False True</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 첫번째, --------------- 20XX년 XX월 XX일 X요일 ---------------
+chat_date = grep("-+ 20\\d+년 \\d+월 \\d+일 [가-힣]+요일 -+", data)
+
+# 두번째, ~님이 ~을 초대하였습니다.
+chat_invite = grep(".+님이 .+님을 초대하였습니다.", data)
+
+# 세번째, ~님이 나갔습니다.
+chat_left = grep('.+님이 나갔습니다.', data)
+
+# 네번째, [이름] [오전/오후 XX:XX] 내용
+idx_chat = grep("\\[.+\\] \\[오전?후? \\d+:\\d+\\] .+", data)
+
+# 다섯번째, 그냥 내용
+
+</code></pre></div></div>
 
 :ET

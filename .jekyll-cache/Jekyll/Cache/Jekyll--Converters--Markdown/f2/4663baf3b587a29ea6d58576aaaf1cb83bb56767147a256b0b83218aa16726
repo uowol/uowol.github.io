@@ -1,4 +1,4 @@
-I"c<h2 id="카카오톡-대화-내용-가져오기">카카오톡 대화 내용 가져오기</h2>
+I"/<h2 id="카카오톡-대화-내용-가져오기">카카오톡 대화 내용 가져오기</h2>
 <p><a href="posts/post-14">이전 포스팅</a>에서 서술한 것처럼 카카오 API에서는 대화 내용을 제공하지 않지만, 카카오톡 어플리케이션에서 대화내용을 추출할 수가 있습니다.</p>
 
 <h3 id="참조">참조</h3>
@@ -25,7 +25,6 @@
 코딩노예님이 uowol님을 초대하였습니다.
 [코딩노예] [오전 6:42] .
 [uowol] [오전 6:42] ㅎㅇㅎㅇ!
-[uowol] [오전 6:42] 반가워요 ㅎㅎㅋ
 [uowol] [오전 6:42] @-----&gt;
 </code></pre></div></div>
 
@@ -76,9 +75,7 @@
 
 <p>제 작업공간이 <code class="language-plaintext highlighter-rouge">C:\Users\uowol\Documents\dev</code>이므로,</p>
 
-<p><code class="language-plaintext highlighter-rouge">KakaoTalkChats_오리방.txt</code>파일에 접근하려면 <code class="language-plaintext highlighter-rouge">R/KakaoTalkChats_오리방.txt</code>,</p>
-
-<p>즉 <code class="language-plaintext highlighter-rouge">R</code>폴더에 들어가 <code class="language-plaintext highlighter-rouge">KakaoTalkChats_오리방.txt</code>에 접근하면 되는 것 입니다.</p>
+<p><code class="language-plaintext highlighter-rouge">KakaoTalkChats_오리방.txt</code>파일에 접근하려면 <code class="language-plaintext highlighter-rouge">R</code>폴더에 들어가 <code class="language-plaintext highlighter-rouge">KakaoTalkChats_오리방.txt</code>에 접근하면 되기에 상대경로를 사용하면 쉽게 표현할 수 있었습니다.</p>
 
 <div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># R &gt; regularExpression.R</span><span class="w">
 </span><span class="n">...</span><span class="w">
@@ -97,8 +94,78 @@
 </span></code></pre></div></div>
 <p>라는 파일을 읽는다면</p>
 
-<p><code class="language-plaintext highlighter-rouge">["대충 A라는 내용", "대충 B라는 내용", "대충 C라는 내용"]</code>의 vector가 만들어집니다.</p>
+<p>[“대충 A라는 내용”, “대충 B라는 내용”, “대충 C라는 내용”]의 vector가 만들어집니다.</p>
+
+<p>이를 활용하여 카카오톡 대화방을 긁어와보겠습니다.</p>
 
 <h3 id="정규표현식을-사용하여-대화-분리하기">정규표현식을 사용하여 대화 분리하기</h3>
+
+<h4 id="대화-유형-나누기">대화 유형 나누기</h4>
+
+<p>긁어온 대화 내용을 보면 유형이 5가지로 나누어집니다.</p>
+
+<ol>
+  <li>
+    <p>————— 20XX년 XX월 XX일 X요일 —————</p>
+  </li>
+  <li>
+    <p>~님이 ~을 초대하였습니다.</p>
+  </li>
+  <li>
+    <p>~님이 나갔습니다.</p>
+  </li>
+  <li>
+    <p>[이름] [오전/오후 XX:XX] 내용</p>
+  </li>
+  <li>
+    <p>그냥 내용</p>
+    <ul>
+      <li>한 줄씩 긁어오다보니 여러 줄의 내용을 채팅했을 경우, 이렇게 한 줄씩 내용만 긁어와질 때가 있습니다.</li>
+      <li>이 때는 가장 최근에 메시지를 보낸 사람의 대화내용에 추가하면 됩니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="정규표현식-구현하기">정규표현식 구현하기</h4>
+
+<p>이제, 정규표현식을 R에서 사용하는 법을 간략하게 알아보겠습니다.</p>
+
+<p>훨씬 많은 함수와 표현식이 있지만 길어질 것 같기에 자세한 내용은 다음 포스팅에 다뤄보겠습니다.</p>
+
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 1. </span><span class="w">
+</span><span class="n">grep</span><span class="p">(</span><span class="n">RegExp</span><span class="p">,</span><span class="w"> </span><span class="n">vector</span><span class="p">)</span><span class="w">
+</span><span class="c1"># 벡터 내에 매개변수로 들어간 정규표현식이 포함된 문자열이 있다면 해당 위치를 반환합니다.</span><span class="w">
+</span><span class="c1"># 만약 여러 개가 부합한다면 여러 개의 위치를 반환합니다.</span><span class="w">
+</span><span class="c1"># value=TRUE를 매개변수로 넣는다면 위치가 아닌 해당 문자열을 반환합니다.</span><span class="w">
+
+</span><span class="c1"># 2.</span><span class="w">
+</span><span class="n">grepl</span><span class="p">(</span><span class="n">RegExp</span><span class="p">,</span><span class="w"> </span><span class="n">vector</span><span class="p">)</span><span class="w">
+</span><span class="c1"># 결과값이 위치가 아니라 TRUE/FALSE값으로 나옵니다.</span><span class="w">
+</span><span class="c1"># ex) True True False True</span><span class="w">
+</span></code></pre></div></div>
+
+<p>아래는 위 함수를 적용한 코드입니다.</p>
+
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 첫번째 유형, --------------- 20XX년 XX월 XX일 X요일 ---------------</span><span class="w">
+</span><span class="n">chat_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grep</span><span class="p">(</span><span class="s2">"-+ 20\\d+년 \\d+월 \\d+일 [가-힣]+요일 -+"</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w">
+</span><span class="c1"># + : 앞 문자가 하나 이상 존재</span><span class="w">
+</span><span class="c1"># \\d : 숫자</span><span class="w">
+</span><span class="c1"># [가-힣] : 모든 한글 문자 중 하나</span><span class="w">
+
+</span><span class="c1"># 두번째 유형, ~님이 ~을 초대하였습니다.</span><span class="w">
+</span><span class="n">chat_invite</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grep</span><span class="p">(</span><span class="s2">".+님이 .+님을 초대하였습니다."</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w">
+</span><span class="c1"># . : 모든 문자 중 하나</span><span class="w">
+
+</span><span class="c1"># 세번째 유형, ~님이 나갔습니다.</span><span class="w">
+</span><span class="n">chat_left</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grep</span><span class="p">(</span><span class="s1">'.+님이 나갔습니다.'</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w">
+
+
+</span><span class="c1"># 네번째 유형, [이름] [오전/오후 XX:XX] 내용</span><span class="w">
+</span><span class="n">idx_chat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grep</span><span class="p">(</span><span class="s2">"\\[.+\\] \\[오전?후? \\d+:\\d+\\] .+"</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># 다섯번째 유형, 그냥 내용</span><span class="w">
+</span><span class="c1"># 딱히 가져올 것 없이 위의 네 가지 유형을 제외한 모든 톡</span><span class="w">
+
+</span></code></pre></div></div>
 
 :ET
