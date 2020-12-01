@@ -1,0 +1,93 @@
+I"Z<h2 id="카카오톡-대화-내용-가져오기">카카오톡 대화 내용 가져오기</h2>
+<p><a href="posts/post-14">이전 포스팅</a>에서 서술한 것처럼 카카오 API에서는 대화 내용을 제공하지 않지만, 카카오톡 어플리케이션에서 대화내용을 추출할 수가 있습니다.</p>
+
+<h3 id="참조">참조</h3>
+<p><a href="https://en4u.co.kr/%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1%EB%82%B4%EB%B3%B4%EB%82%B4%EA%B8%B0/">카카오톡 내보내기 텍스트, 사진, 동영상 내부저장소 저장하는 방법</a></p>
+
+<h3 id="스마트폰과-컴퓨터에서의-차이점">스마트폰과 컴퓨터에서의 차이점?</h3>
+<p>먼저, 스마트폰에서 가져온 대화내용입니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>XX방 n명 카카오톡 대화
+저장한 날짜 : 2020년 11월 30일 오후 8:39
+
+
+2020년 11월 9일 오전 6:42
+2020년 11월 9일 오전 6:42, 코딩노예님이 uowol님을 초대했습니다.
+2020년 11월 9일 오전 6:42, 코딩노예 : .
+2020년 11월 9일 오전 6:42, uowol : ㅎㅇㅎㅇ!
+2020년 11월 9일 오전 6:42, uowol : @-----&gt;
+</code></pre></div></div>
+
+<p>다음은 컴퓨터 카카오톡에서 가져온 내용입니다.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>XX방 님과 카카오톡 대화
+저장한 날짜 : 2020-12-01 17:05:53
+
+--------------- 2020년 11월 9일 월요일 ---------------
+코딩노예님이 uowol님을 초대하였습니다.
+[코딩노예] [오전 6:42] .
+[uowol] [오전 6:42] ㅎㅇㅎㅇ!
+[uowol] [오전 6:42] 반가워요 ㅎㅎㅋ
+[uowol] [오전 6:42] @-----&gt;
+</code></pre></div></div>
+
+<p>그럼 이 둘 중에 어떤 데이터를 사용할 것인지를 정해야 하는데,</p>
+
+<p>저는 이 참에 정규표현식도 복습할 겸 더 복잡해보이는 컴퓨터 버젼의 데이터를 선택했습니다.</p>
+
+<hr />
+
+<h2 id="투머치토커는-누구">투머치토커는 누구?</h2>
+<p>오늘은 데이터를 다루는데 뛰어난 성능을 보여주는 R언어를 사용하여 대화 내용을 분석해보려고 합니다.</p>
+
+<h3 id="stringr-패키지-사용하기">stringr 패키지 사용하기</h3>
+
+<p>먼저,</p>
+
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># R &gt; regularExpression.R</span><span class="w">
+
+</span><span class="c1"># install.packages('stringr') # 만약 설치가 안되어있다면 이것을 먼저 실행해야합니다.</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">stringr</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>이번 프로그램은 문자열을 주로 다룰 것이기 때문에 관련된 라이브러리를 사용한다고 명시해줍니다.</p>
+
+<p>정규표현식은 따로 명시하지 않아도 사용할 수 있습니다.</p>
+
+<h3 id="파일-읽어오기">파일 읽어오기</h3>
+<p>저는 <code class="language-plaintext highlighter-rouge">C:\Users\uowol\Documents\dev</code>에 <code class="language-plaintext highlighter-rouge">R</code>이라는 폴더를 만들어 작업을 진행하고 있습니다.</p>
+
+<p><img src="/assets/imgs/post_15/folder.PNG" alt="folder" title="작업 폴더입니다" /></p>
+
+<p>이 때, R에서 자신이 작업하고 있는 폴더를 알고 싶다면 <code class="language-plaintext highlighter-rouge">getwd()</code>명령어를 통해 알 수 있고 <code class="language-plaintext highlighter-rouge">setwd()</code>명령어로 작업공간을 설정할 수 있습니다.</p>
+
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">getwd</span><span class="p">()</span><span class="w">
+</span><span class="c1"># &gt; source("c:\\Users\\uowol\\Documents\\dev\\R\\regularExpression.R", encoding $</span><span class="w">
+</span><span class="c1"># [1] "C:/Users/uowol/Documents/dev"</span><span class="w">
+</span></code></pre></div></div>
+
+<p>계속해서 작업공간에 대한 이야기를 하고 있는 이유는</p>
+
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># R &gt; regularExpression.R</span><span class="w">
+</span><span class="n">...</span><span class="w">
+</span><span class="n">PATH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"R/KakaoTalkChats_오리방.txt"</span><span class="w">
+</span><span class="n">...</span><span class="w">
+</span></code></pre></div></div>
+
+<p>파일을 이와 같이 <strong>상대경로</strong>로 읽어오기 위해서입니다.</p>
+
+<p>제 작업공간이 <code class="language-plaintext highlighter-rouge">C:\Users\uowol\Documents\dev</code>이므로,</p>
+
+<p><code class="language-plaintext highlighter-rouge">KakaoTalkChats_오리방.txt</code>파일에 접근하려면 <code class="language-plaintext highlighter-rouge">R/KakaoTalkChats_오리방.txt</code>,</p>
+
+<p>즉 <code class="language-plaintext highlighter-rouge">R</code>폴더에 들어가 <code class="language-plaintext highlighter-rouge">KakaoTalkChats_오리방.txt</code>에 접근하면 되는 것 입니다.</p>
+
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># R &gt; regularExpression.R</span><span class="w">
+</span><span class="n">...</span><span class="w">
+</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">readLines</span><span class="p">(</span><span class="n">PATH</span><span class="p">,</span><span class="w"> </span><span class="n">encoding</span><span class="o">=</span><span class="s2">"UTF-8"</span><span class="p">)</span><span class="w">
+</span><span class="n">...</span><span class="w">
+</span></code></pre></div></div>
+
+<p>여기서 <code class="language-plaintext highlighter-rouge">readLines("파일의 경로", 한국어를표시하기 위한 utf-8)</code></p>
+
+<h3 id="정규표현식을-사용하여-대화-분리하기">정규표현식을 사용하여 대화 분리하기</h3>
+
+:ET
