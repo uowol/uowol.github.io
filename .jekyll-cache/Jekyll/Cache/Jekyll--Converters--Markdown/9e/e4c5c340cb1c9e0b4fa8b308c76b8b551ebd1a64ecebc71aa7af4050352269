@@ -1,0 +1,31 @@
+I"�<h2 id="데이터-가져오기">데이터 가져오기</h2>
+<p>R언어로 편집한 데이터를 웹에서 쓰기 위하여 JSON파일로 변환 후 자바스크립트로 읽어보겠습니다.</p>
+
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># R &gt; regularExpression.R</span><span class="w">
+
+</span><span class="c1"># list 형태의 데이터를 JSON 형태로 변환 후 파일로 저장하기 </span><span class="w">
+</span><span class="c1"># install.packages("jsonlite") # fromJSON(), toJSON()</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">jsonlite</span><span class="p">)</span><span class="w">
+</span><span class="n">export.json</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">toJSON</span><span class="p">(</span><span class="n">chat_list</span><span class="p">)</span><span class="w"> </span><span class="c1"># list -&gt; json</span><span class="w">
+</span><span class="n">write</span><span class="p">(</span><span class="n">export.json</span><span class="p">,</span><span class="w"> </span><span class="n">file</span><span class="o">=</span><span class="s2">"export.json"</span><span class="p">)</span><span class="w"> </span><span class="c1"># save a new file</span><span class="w">
+</span></code></pre></div></div>
+
+<!-- <script type="text/javascript" src="/assets/js/importData.js"></script> -->
+<script type="text/javascript">
+    let requestURL = '/assets/json/export.json'
+    // let request = new XMLHttpRequest()
+    // request.open('GET', requestURL)
+    // request.responseType = 'json'
+    // request.send()
+    // request.onload = function() {
+    //     let chatData = request.response
+    //     console.log(chatData)
+    // }
+    let getData = async () => {
+        let res = await fetch(requestURL)
+        console.log(res.text)
+    }
+    getData()
+</script>
+
+:ET

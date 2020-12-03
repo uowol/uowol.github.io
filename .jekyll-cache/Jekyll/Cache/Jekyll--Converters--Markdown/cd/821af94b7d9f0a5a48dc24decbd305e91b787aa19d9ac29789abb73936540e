@@ -1,4 +1,4 @@
-I"/<h2 id="카카오톡-대화-내용-가져오기">카카오톡 대화 내용 가져오기</h2>
+I"T<h2 id="카카오톡-대화-내용-가져오기">카카오톡 대화 내용 가져오기</h2>
 <p><a href="posts/post-14">이전 포스팅</a>에서 서술한 것처럼 카카오 API에서는 대화 내용을 제공하지 않지만, 카카오톡 어플리케이션에서 대화내용을 추출할 수가 있습니다.</p>
 
 <h3 id="참조">참조</h3>
@@ -146,7 +146,9 @@
 
 <p>아래는 위 함수를 적용한 코드입니다.</p>
 
-<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 첫번째 유형, --------------- 20XX년 XX월 XX일 X요일 ---------------</span><span class="w">
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># R &gt; regularExpression.R</span><span class="w">
+
+</span><span class="c1"># 첫번째 유형, --------------- 20XX년 XX월 XX일 X요일 ---------------</span><span class="w">
 </span><span class="n">chat_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grep</span><span class="p">(</span><span class="s2">"-+ 20\\d+년 \\d+월 \\d+일 [가-힣]+요일 -+"</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w">
 </span><span class="c1"># + : 앞 문자가 하나 이상 존재</span><span class="w">
 </span><span class="c1"># \\d : 숫자</span><span class="w">
@@ -166,5 +168,65 @@
 </span><span class="c1"># 다섯번째 유형, 그냥 내용</span><span class="w">
 </span><span class="c1"># 딱히 가져올 것 없이 위의 네 가지 유형을 제외한 모든 톡</span><span class="w">
 </span></code></pre></div></div>
+
+<p>대화 내용을 유형에 따라 구분하였으니 필요에 맞게 데이터를 가져와보겠습니다.</p>
+
+<p>이번 목적은 ‘누가 가장 톡방에서 활발한가?’를 확인하고자 한 것이므로, 시간이나 초대, 나간 사실은 사실 중요하지 않습니다.</p>
+
+<p>다음은 누가, 얼마나 많이, 메시지를 보냈는가를 확인하는 코드입니다.</p>
+
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># R &gt; regularExpression.R</span><span class="w">
+
+</span><span class="n">chat_list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">list</span><span class="p">()</span><span class="w"> </span><span class="c1"># 누가 어떤 메시지를 보냈는지 저장하는 리스트를 만들었습니다.</span><span class="w">
+</span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">''</span><span class="w"> </span><span class="c1"># 누군가의 메시지를 저장할 공간입니다.</span><span class="w">
+</span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">4</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">data</span><span class="p">)){</span><span class="w"> </span><span class="c1"># 3번째 줄 까지는 대화방의 정보를 나타내므로 생략하였습니다.</span><span class="w">
+    </span><span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">chat_date</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">chat_invite</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">chat_left</span><span class="p">)</span><span class="w"> </span><span class="k">next</span><span class="w"> </span><span class="c1"># 톡한 시간, 초대나 나간 사실은 중요하지 않습니다.</span><span class="w">
+    </span><span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="n">idx_chat</span><span class="p">){</span><span class="w"> </span><span class="c1"># 누가 메시지를 보냈는지 알 수 있습니다.</span><span class="w">
+        </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strsplit</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="s1">'] '</span><span class="p">)[[</span><span class="m">1</span><span class="p">]]</span><span class="w"> </span><span class="c1"># strsplit의 결과값의 형태는 리스트이므로 [[1]]을 사용하여 접근하여야 합니다.</span><span class="w">
+        </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">substring</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w">
+        </span><span class="n">time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">substring</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w">
+        </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">temp</span><span class="p">[</span><span class="m">3</span><span class="w">
+        </span><span class="c1"># print(paste(name, time))</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+    </span><span class="k">if</span><span class="p">(</span><span class="n">context</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="w"> </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="c1"># 5번 유형에도 대응할 수 있게 하였습니다.</span><span class="w">
+    </span><span class="n">chat_list</span><span class="p">[</span><span class="n">name</span><span class="p">][[</span><span class="m">1</span><span class="p">]]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">chat_list</span><span class="p">[</span><span class="n">name</span><span class="p">][[</span><span class="m">1</span><span class="p">]],</span><span class="w"> </span><span class="n">context</span><span class="p">)</span><span class="w"> </span><span class="c1"># '사용자'의 대화내용에 추가합니다.</span><span class="w">
+    </span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">''</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>실제로 결과값인 <code class="language-plaintext highlighter-rouge">chat_list</code>를 출력해보면</p>
+
+<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># R &gt; regularExpression.R</span><span class="w">
+</span><span class="n">print</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">chat_list</span><span class="p">))</span><span class="w"> </span><span class="c1"># 리스트의 요약된 정보를 출력합니다.</span><span class="w">
+</span><span class="c1"># List of 11</span><span class="w">
+</span><span class="c1">#  $ : chr [1:252] "." "병역의 의무는" "언제 다하러가는거야..." ...</span><span class="w">
+</span><span class="c1">#  $ : chr [1:222] "ㅎㅇㅎㅇ!" "반가워요 ㅎㅎㅋ" "@-----&gt;" "^^" ...</span><span class="w">
+</span><span class="c1">#  $ : chr [1:38] "우와 반가워요" "ㅇㅇ" "입대한지 이틀만에" ...</span><span class="w">
+</span><span class="c1">#  $ : chr [1:340] "와!!!!" "군필 한명 추가인가요" "이모티콘" "이모티콘" ...</span><span class="w">
+</span><span class="c1">#  $ : chr [1:63] "플래다시간다" "하" "안드로이드 c타입키보드" "방향키랑 일부키가안식이안대서" ...</span><span class="w">
+</span><span class="c1">#  $ : chr [1:275] "ㅈㄴ슬퍼" "월급만 기다리고잇엇는데" "노트북 품절됨" "ㄹㅇ;" ...</span><span class="w">
+</span><span class="c1">#  $ : chr [1:35] "그들은 대단한 요리사들이다..ㄷㄷ;" "ㄷㄷ;;;" "너 에픽세븐 한다 그랬었니" ...</span><span class="w">
+</span><span class="c1">#  $ : chr [1:132] "사진" "아 이게 게임이냐고~" "할머니에서 나온 늑대와 벌목기에서나온 할머니에서나온 늑대의 콜라보;" "아 이걸" ...</span><span class="w">
+</span><span class="c1">#  $ : chr [1:202] "나 전에 홀방밀 미러에서 오메가조립시설에서 생성된 무장한 종이박에서 생성된 연합용사 사라아드에서 생성된 용의 보" "방송이였으면 클립이었다" ...</span><span class="w">
+</span><span class="c1">#  $ : chr [1:102] "디용" "사진" "3성세트" "개꿀잼" ...</span><span class="w">
+</span><span class="c1">#  $ : chr [1:2] "오호" "헋"</span><span class="w">
+
+</span><span class="n">print</span><span class="p">(</span><span class="n">lapply</span><span class="p">(</span><span class="n">chat_list</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">))</span><span class="w">
+</span><span class="c1"># $코딩노예 [1] 252</span><span class="w">
+</span><span class="c1"># $uowol  [1] 222</span><span class="w">
+</span><span class="c1"># $A      [1] 38</span><span class="w">
+</span><span class="c1"># $B      [1] 340</span><span class="w">
+</span><span class="c1"># $C      [1] 63</span><span class="w">
+</span><span class="c1"># $D      [1] 275</span><span class="w">
+</span><span class="c1"># $E      [1] 35</span><span class="w">
+</span><span class="c1"># $F      [1] 132</span><span class="w">
+</span><span class="c1"># $G      [1] 202</span><span class="w">
+</span><span class="c1"># $H      [1] 102</span><span class="w">
+</span><span class="c1"># $I      [1] 2</span><span class="w">
+</span></code></pre></div></div>
+
+<p>B가 상당한 투머치 토커라는 것, I는 개인주의라는 것, 등을 알 수 있었습니다.</p>
+
+<p>다음엔 이 데이터를 기반으로 시각화하는 시간을 가져보도록 하겠습니다.</p>
 
 :ET
