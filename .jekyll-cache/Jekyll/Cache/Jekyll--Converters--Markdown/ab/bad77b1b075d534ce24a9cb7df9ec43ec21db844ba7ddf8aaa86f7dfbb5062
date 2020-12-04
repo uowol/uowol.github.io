@@ -1,7 +1,0 @@
-I"�<h2 id="데이터-가져오기">데이터 가져오기</h2>
-<p>R언어로 편집한 데이터를 웹에서 쓰기 위하여 JSON파일로 변환 후 자바스크립트로 읽어보겠습니다.</p>
-
-<div class="language-R highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># R &gt; regularExpression.R</span><span class="w">
-
-</span></code></pre></div></div>
-:ET

@@ -1,0 +1,25 @@
+I"�<h2 id="데이터-시각화">데이터 시각화</h2>
+<p>이번엔 json 형태로 저장된 카카오톡 대화내용으로 HTML, CSS를 사용하여 시각화해보겠습니다.</p>
+
+<html lang="kr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+<body>
+    sasfa
+<script type="text/javascript">
+    let requestURL = '/assets/json/export.json'
+
+    // Method 2: Use a fetch() function
+    let getData = async () => {
+        let res = await fetch(requestURL)
+        let data = await res.json()
+        // console.log(data)
+    }
+    getData()
+</script>
+</body>
+</html>
+:ET
