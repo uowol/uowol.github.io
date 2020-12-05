@@ -1,7 +1,10 @@
+I"8<h2 id="데이터-시각화">데이터 시각화</h2>
+<p>이번엔 json 형태로 저장된 카카오톡 대화내용으로 HTML, CSS를 사용하여 시각화해보겠습니다.</p>
+
 <html lang="kr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
         #chat-list{
@@ -31,12 +34,8 @@
             justify-content: center;
         }
         .chat-item-pbar{
-            -moz-appearance: none;
-            -webkit-appearance: none;
-            appearance: none;
             padding-left:10px;
             width: 300px;
-            height:10px;
         }
         .chat-item-vbox{
             padding: 10px;
@@ -45,24 +44,7 @@
             flex-flow: row;
             align-items: center;
         }
-        progress::-webkit-progress-bar {
-            background-color: #eee;
-            border-radius: 8px;
-            border: .01px solid #2e2e2e;
-        }
-        progress::-webkit-progress-value {
-            background-color: #ffd400;
-            border-radius: 8px;
-        }
-        progress::-moz-progress-bar {
-            background-color: #eee;
-            border-radius: 8px;
-            border: .01px solid #2e2e2e;
-        }
-        progress::-moz-progress-value {
-            background-color: #ffd400;
-            border-radius: 8px;
-        }
+        
 
     </style>
 </head>
@@ -92,3 +74,4 @@
 </script>
 </body>
 </html>
+:ET
