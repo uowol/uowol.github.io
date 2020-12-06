@@ -1,0 +1,123 @@
+I"W<h2 id="데이터-시각화">데이터 시각화</h2>
+<p>이번엔 json 형태로 저장된 카카오톡 대화내용으로 HTML, CSS를 사용하여 시각화해보겠습니다.</p>
+
+<html lang="kr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        #chat-list{
+            list-style-type:none;
+            border: 1px solid #2e2e2e;
+            min-height: 200px;
+            width: 400px;
+            box-sizing: border-box;
+            padding: 0;
+        }
+        .chat-item{
+            margin: 0;
+            height: 100px;
+            border-bottom: 1px solid #2e2e2e;
+            margin: 0;
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+        .chat-item-name{
+            width:3rem;
+            height:3rem;
+            border: 1px solid #2e2e2e;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chat-item-pbar{
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            appearance: none;
+            padding-left:10px;
+            width: 300px;
+            height:10px;
+        }
+        .chat-item-vbox{
+            padding: 10px;
+            height: 100%;
+            display: flex;
+            flex-flow: row;
+            align-items: center;
+        }
+        progress::-webkit-progress-bar {
+            background-color: #eee;
+            border-radius: 8px;
+        }
+        progress::-webkit-progress-value {
+            background-color: #ffd400;
+            border-radius: 8px;
+        }
+        progress::-moz-progress-bar {
+            background-color: #eee;
+            border-radius: 8px;
+        }
+        progress::-moz-progress-value {
+            background-color: #ffd400;
+            border-radius: 8px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="chat-list-frame">
+        <ul id="chat-list">
+            <li class="chat-item">
+                <div class="chat-item-vbox">
+                    <span class="chat-item-name">김</span>
+                </div>
+                <div class="chat-item-vbox">
+                    <progress value="0" max="100" class="chat-item-pbar"></progress>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <script src="https://github.com/STRML/textFit/blob/master/textFit.js"></script>
+    <script type="text/javascript">
+        let requestURL = '/assets/json/export.json'
+
+        // Method 2: Use a fetch() function
+        let getData = async () => {
+            let res = await fetch(requestURL)
+            let data = await res.json()
+            console.log(data)
+
+            let container = document.getElementById('chat-list')
+
+            for(name in data){
+                let li = document.createElement('li')
+                li.setAttribute('class', 'chat-item')
+                let vbox1 = document.createElement('div')
+                vbox1.setAttribute('class', 'chat-item-vbox')
+                let vbox2 = document.createElement('div')
+                vbox2.setAttribute('class', 'chat-item-vbox')
+                let itemName = document.createElement('span')
+                itemName.setAttribute('class', 'chat-item-name')
+                itemName.innerText = name
+                let itemPbar = document.createElement('progress')
+                itemPbar.setAttribute('class', 'chat-item-pbar')
+                itemPbar.value = 0
+                itemPbar.max = 36000
+                
+                vbox1.appendChild(itemName)
+                vbox2.appendChild(itemPbar)
+                li.appendChild(vbox1)
+                li.appendChild(vbox2)
+                container.appendChild(li)
+
+                itemPbar.value = data[name].length
+            }
+        }
+        getData()
+    </script>
+</body>
+</html>
+:ET

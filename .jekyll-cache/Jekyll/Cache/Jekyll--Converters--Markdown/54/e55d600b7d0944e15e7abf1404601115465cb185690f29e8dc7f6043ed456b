@@ -1,7 +1,10 @@
+I"h<h2 id="데이터-시각화">데이터 시각화</h2>
+<p>이번엔 json 형태로 저장된 카카오톡 대화내용으로 HTML, CSS를 사용하여 시각화해보겠습니다.</p>
+
 <html lang="kr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
         * {
@@ -139,7 +142,7 @@
         </ul>
     </div>
     <script type="text/javascript">
-        let requestURL = '/assets/json/export.json'
+        let requestURL = '/assets/json/export_lite.json'
 
         // Method 2: Use a fetch() function
         let getData = async () => {
@@ -157,8 +160,8 @@
                 let img = 0
                 let emoji = 0
                 arr[1].map(v => {
-                    if(v == '이모티콘') emoji += 1
-                    if(v == '사진') img += 1
+                    if(v == '이모티콘') img += 1
+                    if(v == '사진') emoji += 1
                 })
                 dataImgLengths.push(img)
                 dataEmojiLengths.push(emoji)
@@ -188,21 +191,22 @@
                 let imgBar = document.createElement('progress')
                 imgBar.setAttribute('class', 'chat-item-pbar img')
                 imgBar.value = dataImgLengths[idx]
-                imgBar.style.left = 10 + 300 * (dataEmojiLengths[idx]/max) + 'px'
+                imgBar.style.left = 10 + dataImgLengths[idx] + 'px'
                 imgBar.max = max
                 let emojiBar = document.createElement('progress')
                 emojiBar.setAttribute('class', 'chat-item-pbar emoji')
                 emojiBar.value = dataEmojiLengths[idx]
+                emojiBar.style.left = 10 + dataEmojiLengths[idx] + 'px'
                 emojiBar.max = max
                 let msgValue = document.createElement('div')
                 msgValue.setAttribute('class', 'chat-item-value')
-                msgValue.innerText = "messages: \t\t" + dataLengths[idx]
+                msgValue.innerText = "messages: \t" + dataLengths[idx]
                 let emojiValue = document.createElement('div')
                 emojiValue.setAttribute('class', 'chat-item-value')
-                emojiValue.innerText = "emoticons: \t\t" + dataEmojiLengths[idx]
+                emojiValue.innerText = "emoticons: \t" + dataEmojiLengths[idx]
                 let imgValue = document.createElement('div')
                 imgValue.setAttribute('class', 'chat-item-value')
-                imgValue.innerText = "images: \t\t" + dataImgLengths[idx]
+                imgValue.innerText = "images: \t" + dataImgLengths[idx]
                 
                 barContainer.appendChild(msgBar)
                 barContainer.appendChild(imgBar)
@@ -222,3 +226,4 @@
     </script>
 </body>
 </html>
+:ET
