@@ -178,7 +178,7 @@
                 vbox2.setAttribute('class', 'chat-item-vbox')
                 let itemName = document.createElement('span')
                 itemName.setAttribute('class', 'chat-item-name')
-                itemName.innerText = dataArr[idx][0].length > 3 ? dataArr[idx][0].slice(0,3) : dataArr[idx][0]
+                itemName.innerText = dataArr[idx][0].length > 2 ? dataArr[idx][0].slice(0,2) : dataArr[idx][0]
                 let barContainer = document.createElement('div')
                 barContainer.setAttribute('class', 'chat-item-pbar-list')
                 let msgBar = document.createElement('progress')
