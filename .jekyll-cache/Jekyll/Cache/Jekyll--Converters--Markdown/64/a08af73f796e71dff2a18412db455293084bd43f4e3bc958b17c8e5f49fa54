@@ -1,0 +1,206 @@
+I"�<h2 id="디자인-개선하기">디자인 개선하기</h2>
+<p>프로그래스 바의 완성도를 높여보고자 새롭게 다시 설계해보았습니다.</p>
+
+<html lang="kr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+
+        *{
+            box-sizing: border-box;
+        }
+
+        #mList{
+            margin: 0;
+            padding-inline-start: 0;
+        }
+
+        .mItem{
+            display: flex;
+            align-items: center;
+            width: 400px;
+            height: 100px;
+            border: 1px solid #2e2e2e;
+            padding: 10px;
+        }
+
+        .mVbox{
+            display: flex;
+            flex-flow: column;
+            justify-content: space-around;
+            height: 100%;
+        }
+
+        .progress{
+            margin-left: 20px;
+            background-color: #d8d8d8;
+            border-radius: 10px;
+            position:relative;
+            height: 15px;
+            width: 300px;
+        }
+
+        .progress-done{
+            height: 100%;
+            color: #fff;
+            font-size: .75rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            border-radius: 10px;
+            transition: 1s ease .3s;
+            background: linear-gradient(to left, #F2709C, #FF9472);
+            box-shadow: 0 3px 3px -5px #F2709C, 0 2px 5px #F2709C;
+            /* width: 0;
+            opacity: 0; */
+        }
+
+        .progress-done.msg{
+            background: linear-gradient(to left, #ffa600, #ffd000);
+            box-shadow: 0 3px 3px -5px #ffa600, 0 2px 5px #ffd000;
+        }
+        .progress-done.emoji{
+            background: linear-gradient(to left, #0077ff, #0077ff);
+            box-shadow: 0 3px 3px -5px #0077ff, 0 2px 5px #0077ff;
+        }
+        .progress-done.img{
+            background: linear-gradient(to left, #F2709C, #FF9472);
+            box-shadow: 0 3px 3px -5px #F2709C, 0 2px 5px #FF9472;
+        }
+
+        .mName{
+            width:3rem;
+            height:3rem;
+            border: 1px solid #2e2e2e;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="mContainer">
+        <ul id="mList">
+            <!-- <li class="mItem">
+                <div class="mVbox">
+                    <span class="mName">김</span>
+                </div>
+                <div class="mVbox">
+                    <div class="progress">
+                        <div class="progress-done msg" value="0">70%</div>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-done emoji" value="0">70%</div>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-done img" value="0">70%</div>
+                    </div>
+                </div>
+            </li> -->
+        </ul>
+    </div>
+    <script type="text/javascript">
+        let requestURL = '/assets/json/export_mama.json'
+
+        // // Method 2: Use a fetch() function
+        let getData = async () => {
+            let res = await fetch(requestURL)
+            let data = await res.json()
+            // console.log(data)
+            let imgLengths = []
+            let emojiLengths = []
+            let msgLengths = Object.values(data).map(arr => {
+                let img = 0
+                let emoji = 0
+                let msg = arr.length
+                arr.map(v => {
+                    if(v == '이모티콘') emoji += 1
+                    if(v == '사진') img += 1
+                    else if(/사진 \d+장/.test(v)){
+                        let n = v.split(' ')[1]
+                        n = n.slice(0, n.length-1) * 1
+                        img += n
+                        msg += n - 1
+                    }
+                })
+                imgLengths.push(img)
+                emojiLengths.push(emoji)
+                return msg
+            })
+            let dataArr = []
+            for(let name in data){
+                dataArr.push([name, data[name]])
+            }
+            dataArr.sort((a, b) => {
+                let idxA = Object.keys(a[0])
+                let idxB = Object.keys(b[0])
+                return msgLengths[idxB] - msgLengths[idxA]
+            })
+            console.log(msgLengths)
+
+
+            let max = dataArr[0][1].length
+            // console.log(dataArr, dataLengths, max)
+
+            let container = document.getElementById('mList')
+
+            for(let idx in dataArr){
+                let li = document.createElement('li')
+                li.setAttribute('class', 'mItem')
+                let vbox1 = document.createElement('div')
+                vbox1.setAttribute('class', 'mVbox')
+                let vbox2 = document.createElement('div')
+                vbox2.setAttribute('class', 'mVbox')
+                let itemName = document.createElement('span')
+                itemName.setAttribute('class', 'mName')
+                itemName.innerText = dataArr[idx][0].length > 2 ? dataArr[idx][0].slice(0,2) : dataArr[idx][0]
+                let msgBar = document.createElement('div')
+                msgBar.setAttribute('class', 'progress')
+                let msgBarDone = document.createElement('div')
+                msgBarDone.setAttribute('class', 'msg progress-done')
+                msgBarDone.value = msgLengths[idx]
+                msgBarDone.innerText = "total: "+msgBarDone.value
+                let emojiBar = document.createElement('div')
+                emojiBar.setAttribute('class', 'progress')
+                let emojiBarDone = document.createElement('div')
+                emojiBarDone.setAttribute('class', 'emoji progress-done')
+                emojiBarDone.value = emojiLengths[idx]
+                emojiBarDone.innerText = "emoji: "+emojiBarDone.value
+                let imgBar = document.createElement('div')
+                imgBar.setAttribute('class', 'progress')
+                let imgBarDone = document.createElement('div')
+                imgBarDone.setAttribute('class', 'img progress-done')
+                imgBarDone.value = imgLengths[idx]
+                imgBarDone.innerText = "img: "+imgBarDone.value
+                
+                vbox1.appendChild(itemName)
+                msgBar.appendChild(msgBarDone)
+                vbox2.appendChild(msgBar)
+                emojiBar.appendChild(emojiBarDone)
+                vbox2.appendChild(emojiBar)
+                imgBar.appendChild(imgBarDone)
+                vbox2.appendChild(imgBar)
+                li.appendChild(vbox1)
+                li.appendChild(vbox2)
+                container.appendChild(li)
+
+                msgBarDone.style.width = 100*(msgBarDone.value/max) + "%"
+                msgBarDone.style.opacity = 1
+                emojiBarDone.style.width = 100*(emojiBarDone.value/max) + "%"
+                emojiBarDone.style.opacity = 1
+                imgBarDone.style.width = 100*(imgBarDone.value/max) + "%"
+                imgBarDone.style.opacity = 1
+            }
+        }
+        getData()
+    </script>
+</body>
+</html>
+:ET

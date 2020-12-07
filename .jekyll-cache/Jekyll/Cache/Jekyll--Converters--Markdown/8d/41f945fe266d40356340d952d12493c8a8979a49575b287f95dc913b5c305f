@@ -1,125 +1,12 @@
+I"W<h2 id="디자인-개선하기">디자인 개선하기</h2>
+<p>프로그래스 바의 완성도를 높여보고자 새롭게 다시 설계해보았습니다.</p>
+
 <html lang="kr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
-        * {
-            box-sizing: border-box;
-        }
-        #chat-list{
-            list-style-type:none;
-            border: 1px solid #2e2e2e;
-            min-height: 200px;
-            width: 400px;
-            box-sizing: border-box;
-            padding: 0;
-        }
-        .chat-item{
-            margin: 0;
-            height: 100px;
-            border-top: 1px solid #2e2e2e;
-            margin: 0;
-            display: flex;
-            flex-wrap: nowrap;
-            align-items: center;
-        }
-        .chat-item:nth-child(1){
-            border-top: 0px solid #2e2e2e;
-        }
-        .chat-item-name{
-            width:3rem;
-            height:3rem;
-            border: 1px solid #2e2e2e;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: .95rem;
-        }
-        .chat-item-pbar{
-            -moz-appearance: none;
-            -webkit-appearance: none;
-            appearance: none;
-            width: 300px;
-            height:10px;
-            /* position: absolute; */
-            /* top: 0px; */
-        }
-        .chat-item-pbar-list{
-            padding-left:10px;
-            position: relative;
-        }
-        .chat-item-vbox{
-            padding: 10px;
-            height: 100%;
-            display: flex;
-            flex-flow: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .chat-item-value{
-            text-align: end;
-            width: 100%;
-            margin: 0;
-        }
-        progress::-webkit-progress-bar {
-            background-color: #eee;
-            border-radius: 8px;
-        }
-        progress::-webkit-progress-value{
-            background-color: #ffd400;
-            border-radius: 8px;
-        }
-        progress::-moz-progress-bar {
-            background-color: #eee;
-            border-radius: 8px;
-        }
-        progress::-moz-progress-value {
-            background-color: #ffd400;
-            border-radius: 8px;
-        }
-        .chat-item-value{
-            font-size: .8rem;
-            height: 1rem;
-            position: relative;
-            top: -.5rem;
-        }
-        .chat-item-pbar-list progress.emoji{
-            position: absolute;
-            left: 10px;
-            top: 10px;
-        }
-        .chat-item-pbar-list progress.img{
-            position: absolute;
-            left: 10px;
-            top: 10px;
-        }
-        progress.emoji::-webkit-progress-value{
-            background-color: #b9f;
-        }
-        progress.emoji::-moz-progress-value{
-            background-color: #b9f;
-        }
-        progress.img::-webkit-progress-value{
-            background-color: rgb(255, 104, 104);
-        }
-        progress.img::-moz-progress-value{
-            background-color: rgb(255, 104, 104);
-        }
-        progress.emoji::-webkit-progress-bar{
-            background-color: transparent;
-        }
-        progress.emoji::-moz-progress-bar{
-            background-color: transparent;
-        }
-        progress.img::-webkit-progress-bar{
-            background-color: transparent;
-        }
-        progress.img::-moz-progress-bar{
-            background-color: transparent;
-        }
-
+       
     </style>
 </head>
 <body>
@@ -139,7 +26,7 @@
         </ul>
     </div>
     <script type="text/javascript">
-        let requestURL = '/assets/json/export_lite.json'
+        let requestURL = '/assets/json/export.json'
 
         // Method 2: Use a fetch() function
         let getData = async () => {
@@ -222,3 +109,4 @@
     </script>
 </body>
 </html>
+:ET

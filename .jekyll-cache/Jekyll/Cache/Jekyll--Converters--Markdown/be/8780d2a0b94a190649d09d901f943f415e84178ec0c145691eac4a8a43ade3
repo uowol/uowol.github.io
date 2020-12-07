@@ -1,33 +1,72 @@
+I"�<h2 id="디자인-개선하기">디자인 개선하기</h2>
+<p>프로그래스 바의 완성도를 높여보고자 새롭게 다시 설계해보았습니다.</p>
+
 <html lang="kr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
-        * {
+        @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+
+        *{
             box-sizing: border-box;
         }
-        #chat-list{
-            list-style-type:none;
-            border: 1px solid #2e2e2e;
-            min-height: 200px;
-            width: 400px;
-            box-sizing: border-box;
-            padding: 0;
-        }
-        .chat-item{
-            margin: 0;
-            height: 100px;
-            border-top: 1px solid #2e2e2e;
-            margin: 0;
+
+        .mItem{
             display: flex;
-            flex-wrap: nowrap;
             align-items: center;
+            width: 400px;
+            height: 100px;
+            border: 1px solid #2e2e2e;
+            padding: 10px;
         }
-        .chat-item:nth-child(1){
-            border-top: 0px solid #2e2e2e;
+
+        .mVbox{
+            display: flex;
+            flex-flow: column;
+            justify-content: space-around;
+            height: 100%;
         }
-        .chat-item-name{
+
+        .progress{
+            margin-left: 20px;
+            background-color: #d8d8d8;
+            border-radius: 10px;
+            position:relative;
+            height: 15px;
+            width: 300px;
+        }
+
+        .progress-done{
+            height: 100%;
+            color: #fff;
+            font-size: .75rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            border-radius: 10px;
+            transition: 1s ease .3s;
+            background: linear-gradient(to left, #F2709C, #FF9472);
+            box-shadow: 0 3px 3px -5px #F2709C, 0 2px 5px #F2709C;
+            /* width: 0;
+            opacity: 0; */
+        }
+
+        .progress-done.msg{
+            background: linear-gradient(to left, #ffa600, #ffd000);
+            box-shadow: 0 3px 3px -5px #ffa600, 0 2px 5px #ffd000;
+        }
+        .progress-done.emoji{
+            background: linear-gradient(to left, #0077ff, #0077ff);
+            box-shadow: 0 3px 3px -5px #0077ff, 0 2px 5px #0077ff;
+        }
+        .progress-done.img{
+            background: linear-gradient(to left, #F2709C, #FF9472);
+            box-shadow: 0 3px 3px -5px #F2709C, 0 2px 5px #FF9472;
+        }
+
+        .mName{
             width:3rem;
             height:3rem;
             border: 1px solid #2e2e2e;
@@ -35,113 +74,37 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: .95rem;
-        }
-        .chat-item-pbar{
-            -moz-appearance: none;
-            -webkit-appearance: none;
-            appearance: none;
-            width: 300px;
-            height:10px;
-            /* position: absolute; */
-            /* top: 0px; */
-        }
-        .chat-item-pbar-list{
-            padding-left:10px;
-            position: relative;
-        }
-        .chat-item-vbox{
-            padding: 10px;
-            height: 100%;
-            display: flex;
-            flex-flow: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .chat-item-value{
-            text-align: end;
-            width: 100%;
-            margin: 0;
-        }
-        progress::-webkit-progress-bar {
-            background-color: #eee;
-            border-radius: 8px;
-        }
-        progress::-webkit-progress-value{
-            background-color: #ffd400;
-            border-radius: 8px;
-        }
-        progress::-moz-progress-bar {
-            background-color: #eee;
-            border-radius: 8px;
-        }
-        progress::-moz-progress-value {
-            background-color: #ffd400;
-            border-radius: 8px;
-        }
-        .chat-item-value{
-            font-size: .8rem;
-            height: 1rem;
-            position: relative;
-            top: -.5rem;
-        }
-        .chat-item-pbar-list progress.emoji{
-            position: absolute;
-            left: 10px;
-            top: 10px;
-        }
-        .chat-item-pbar-list progress.img{
-            position: absolute;
-            left: 10px;
-            top: 10px;
-        }
-        progress.emoji::-webkit-progress-value{
-            background-color: #b9f;
-        }
-        progress.emoji::-moz-progress-value{
-            background-color: #b9f;
-        }
-        progress.img::-webkit-progress-value{
-            background-color: rgb(255, 104, 104);
-        }
-        progress.img::-moz-progress-value{
-            background-color: rgb(255, 104, 104);
-        }
-        progress.emoji::-webkit-progress-bar{
-            background-color: transparent;
-        }
-        progress.emoji::-moz-progress-bar{
-            background-color: transparent;
-        }
-        progress.img::-webkit-progress-bar{
-            background-color: transparent;
-        }
-        progress.img::-moz-progress-bar{
-            background-color: transparent;
+            font-size: 1rem;
         }
 
+        
     </style>
 </head>
 <body>
-    <div class="chat-list-frame">
-        <ul id="chat-list">
-            <!-- <li class="chat-item">
-                <div class="chat-item-vbox">
-                    <span class="chat-item-name">김</span>
+    <div class="mContainer">
+        <ul id="mList">
+            <li class="mItem">
+                <div class="mVbox">
+                    <span class="mName">김</span>
                 </div>
-                <div class="chat-item-vbox">
-                    <div class="chat-item-pbar-list">
-                        <progress value="0" max="100" class="chat-item-pbar"></progress>
-                        <p></p>
+                <div class="mVbox">
+                    <div class="progress">
+                        <div class="progress-done msg" value="0">70%</div>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-done emoji" value="0">70%</div>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-done img" value="0">70%</div>
                     </div>
                 </div>
-            </li> -->
+            </li>
         </ul>
     </div>
     <script type="text/javascript">
-        let requestURL = '/assets/json/export_lite.json'
+        let requestURL = '/assets/json/export.json'
 
-        // Method 2: Use a fetch() function
+        // // Method 2: Use a fetch() function
         let getData = async () => {
             let res = await fetch(requestURL)
             let data = await res.json()
@@ -151,19 +114,20 @@
                 dataArr.push([name, data[name]])
             }
             dataArr.sort((a, b) => b[1].length - a[1].length)
-            let dataImgLengths = []
-            let dataEmojiLengths = []
-            let dataLengths = dataArr.map(arr => {
+            let imgLengths = []
+            let emojiLengths = []
+            let msgLengths = dataArr.map(arr => {
                 let img = 0
                 let emoji = 0
                 arr[1].map(v => {
                     if(v == '이모티콘') emoji += 1
                     if(v == '사진') img += 1
                 })
-                dataImgLengths.push(img)
-                dataEmojiLengths.push(emoji)
+                imgLengths.push(img)
+                emojiLengths.push(emoji)
                 return arr[1].length
             })
+
             let max = dataArr[0][1].length
             // console.log(dataArr, dataLengths, max)
 
@@ -222,3 +186,4 @@
     </script>
 </body>
 </html>
+:ET
