@@ -1,7 +1,23 @@
+I"�%<h2 id="디자인-개선하기">디자인 개선하기</h2>
+<p>프로그래스 바의 완성도를 높여보고자 새롭게 다시 설계해보았습니다.</p>
+
+<h3 id="개선된-점">개선된 점</h3>
+<ul>
+  <li>UI디자인 개선</li>
+  <li>오류 해결: ‘사진 n장’ 문자열 처리가 사진 1장으로 분류되던 문제를 해결</li>
+  <li><del>오류 발견: progress바의 내용이 잘리는 경우의 처리문제</del>
+    <ul>
+      <li>12월 8일 부로 수정하였습니다.</li>
+    </ul>
+  </li>
+  <li>데이터의 양 추가</li>
+  <li>모바일 환경에서도 화면이 잘리지 않게 수정</li>
+</ul>
+
 <html lang="kr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
         @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 
@@ -115,7 +131,7 @@
         </ul>
     </div>
     <script type="text/javascript">
-        let requestURL = '/assets/json/export_lite.json'
+        let requestURL = '/assets/json/export.json'
 
         // // Method 2: Use a fetch() function
         let getData = async () => {
@@ -248,3 +264,4 @@
     </script>
 </body>
 </html>
+:ET

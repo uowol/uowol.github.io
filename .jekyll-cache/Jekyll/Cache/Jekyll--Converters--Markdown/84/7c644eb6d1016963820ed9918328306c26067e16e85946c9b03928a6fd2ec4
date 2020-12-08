@@ -1,0 +1,111 @@
+I"�<h2 id="키워드-분석하기">키워드 분석하기</h2>
+<p>카카오톡 대화 내용 속 자주 사용한 키워드를 시각화하여 어떤 추론을 할 수 있는지 알아보겠습니다.</p>
+
+<h3 id="키워드-랭킹">키워드 랭킹</h3>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        .m-container{
+            display: flex;
+            flex-flow: column;
+            border: 1px solid #aaa;
+        }
+        .m-item:nth-child(1){
+            border-top: 0;
+        }
+        .m-item{
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            border-top: 1px solid #aaa;
+            padding:10px;
+        }
+        .m-item-rank{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            width: 100%;
+        }
+        .m-item-value{
+            width: 200%;
+        }
+        .m-item-details{
+            width: 100%;
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        div.header{
+            font-size: 1.5rem;
+            font-weight: bolder;
+        }
+        .m-item.header{
+            background-color: #2e2e2e;
+            color: #eee;
+        }
+        .m-item-details-count{
+            font-size: 1.5rem;
+        }
+        .m-item-datails-ratio{
+            font-size: 1rem;
+            color:#2f2f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="m-container" id="m_container">
+        <div class="m-item header">
+            <div class="m-item-rank header">랭킹</div>
+            <div class="m-item-value header">키워드</div>
+            <div class="m-item-details header">
+                세부정보
+            </div>
+        </div>
+        <div class="m-item">
+            <div class="m-item-rank">#12</div>
+            <div class="m-item-value">아니 길동이 새키가 꼴받게 하잖아</div>
+            <div class="m-item-details">
+                <div class="m-item-details-count">198,200</div>
+                <div class="m-item-datails-ratio">50%</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let requestURL = '/assets/json/export.json'
+
+        // // Method 2: Use a fetch() function
+        let getData = async () => {
+            let res = await fetch(requestURL)
+            let data = await res.json()
+            // console.log(data)
+            let has = []
+            let keywordsArr = []
+            for(let name in data){
+                data[name].map(str => {
+                    let keywords = str.split(' ')
+                    for(let keyword of keywords){
+                        if(keyword == '이모티콘') continue
+                        else if(keyword == '사진') continue
+                        else if(/^사진 \d+장$/.test(keyword)) continue
+                        else if(/[ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣ><,.?!-+_]+/.test(keyword)) continue
+                        if(!has.includes(keyword)){
+                            has.push(keyword)
+                            keywordsArr.push([keyword, 0])
+                        }
+                        let idx = has.indexOf(keyword)
+                        keywordsArr[idx][1]++
+                    }
+                })
+            }
+            console.log(keywordsArr)
+        }
+        getData()
+    </script>
+</body>
+</html>
+:ET
