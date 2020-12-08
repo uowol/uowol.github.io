@@ -1,7 +1,12 @@
+I"W<h2 id="키워드-분석하기">키워드 분석하기</h2>
+<p>카카오톡 대화 내용 속 자주 사용한 키워드를 시각화하여 어떤 추론을 할 수 있는지 알아보겠습니다.</p>
+
+<h3 id="키워드-랭킹">키워드 랭킹</h3>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
         .m-container{
             display: flex;
@@ -62,14 +67,14 @@
                 세부정보
             </div>
         </div>
-        <!-- <div class="m-item">
+        <div class="m-item">
             <div class="m-item-rank">#12</div>
             <div class="m-item-value">아니 길동이 새키가 꼴받게 하잖아</div>
             <div class="m-item-details">
                 <div class="m-item-details-count">198,200</div>
                 <div class="m-item-datails-ratio">50%</div>
             </div>
-        </div> -->
+        </div>
     </div>
     <script>
         let requestURL = '/assets/json/keywords_from_kakao_full.json'
@@ -78,39 +83,31 @@
         let getData = async () => {
             let res = await fetch(requestURL)
             let data = await res.json()
-            console.log(data[0])
-            let cnt = 1
-            let size = Object.values(data[0]).reduce((a, b) => a+b)
-            console.log(size)
-            for(let keyword in data[0]){
-                let item = document.createElement('div')
-                item.setAttribute('class', 'm-item')
-                let rank = document.createElement('div')
-                rank.setAttribute('class', 'm-item-rank')
-                rank.innerText = "#" + (cnt++)
-                let value = document.createElement('div')
-                value.setAttribute('class', 'm-item-value')
-                value.innerText = keyword
-                let vbox = document.createElement('div')
-                vbox.setAttribute('class', 'm-item-details')
-                let count = document.createElement('div')
-                count.setAttribute('class', 'm-item-details-count')
-                count.innerText = data[0][keyword].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                let ratio = document.createElement('div')
-                ratio.setAttribute('class', 'm-item-datails-ratio')
-                ratio.innerText = (data[0][keyword] / size * 100).toFixed(2) + "%"
-                vbox.appendChild(count)
-                vbox.appendChild(ratio)
-
-                item.appendChild(rank)
-                item.appendChild(value)
-                item.appendChild(vbox)
-
-                m_container.appendChild(item)
+            // console.log(data)
+            let has = []
+            let keywordsArr = []
+            for(let name in data){
+                data[name].map(str => {
+                    let keywords = str.split(' ')
+                    for(let keyword of keywords){
+                        if(keyword == '이모티콘') continue
+                        else if(keyword == '사진') continue
+                        else if(/^사진 \d+장$/.test(keyword)) continue
+                        else if(/[ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣ><,.?!-+_*]+/.test(keyword)) continue
+                        keywordsArr.push(keyword)
+                        if(!has.includes(keyword)){
+                            has.push(keyword)
+                            keywordsArr.push([keyword, 0])
+                        }
+                        let idx = has.indexOf(keyword)
+                        keywordsArr[idx][1]++
+                    }
+                })
             }
-            // console.log(keywordsArr)
+            console.log(keywordsArr)
         }
         getData()
     </script>
 </body>
 </html>
+:ET
