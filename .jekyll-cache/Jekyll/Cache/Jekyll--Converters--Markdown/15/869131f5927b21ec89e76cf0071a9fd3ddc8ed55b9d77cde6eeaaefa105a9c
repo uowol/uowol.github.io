@@ -1,4 +1,4 @@
-I"$<h2 id="키워드-분석하기">키워드 분석하기</h2>
+I"�<h2 id="키워드-분석하기">키워드 분석하기</h2>
 <p>카카오톡 대화 내용 속 자주 사용한 키워드를 시각화하여 어떤 추론을 할 수 있는지 알아보겠습니다.</p>
 
 <h3 id="키워드-랭킹">키워드 랭킹</h3>
@@ -77,7 +77,7 @@
         </div> -->
     </div>
     <script>
-        let requestURL = '/assets/json/duck/keywords_from_kakao.json'
+        let requestURL = '/assets/json/keywords_from_kakao_ranked.json'
 
         // // Method 2: Use a fetch() function
         let getData = async () => {
@@ -88,6 +88,8 @@
             let size = Object.values(data[0]).reduce((a, b) => a+b)
             // console.log(size)
             for(let keyword in data[0]){
+                if(/^X[0-9]+/.test(keyword))
+                    keyword = keyword.slice(1)
                 let item = document.createElement('div')
                 item.setAttribute('class', 'm-item')
                 let rank = document.createElement('div')

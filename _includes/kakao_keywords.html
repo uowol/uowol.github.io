@@ -90,7 +90,10 @@
                 rank.innerText = "#" + (cnt++)
                 let value = document.createElement('div')
                 value.setAttribute('class', 'm-item-value')
-                value.innerText = keyword
+                if(/^X[0-9]+/.test(keyword))
+                    value.innerText = keyword.slice(1)
+                else
+                    value.innerText = keyword
                 let vbox = document.createElement('div')
                 vbox.setAttribute('class', 'm-item-details')
                 let count = document.createElement('div')
