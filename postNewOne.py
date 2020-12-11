@@ -9,7 +9,7 @@ nowtime = now.strftime('%H:%M:%S')
 
 
 # Check the post's order
-path = './_posts/'
+path = 'uowol.github.io/_posts/'
 idx = len([name for name in os.listdir(path)]) + 1
 
 
