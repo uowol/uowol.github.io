@@ -1,0 +1,502 @@
+I""<h2 id="info">Info</h2>
+<h3 id="summary">Summary</h3>
+<p>윈도우의 텍스트 뷰어 프로그램이 너무 적어 직접 만들어보았습니다. 웹 페이지로 동작하여금 하여 접근성을 높여보았습니다.</p>
+
+<h3 id="platform">Platform</h3>
+<p>HTML, Node.js</p>
+
+<h3 id="functions">Functions</h3>
+<ul>
+  <li>필수기능:
+    <ol>
+      <li>✅ 텍스트 읽어오기</li>
+      <li>✅ 파일 업로드하기</li>
+      <li>✅ 책갈피 기능</li>
+    </ol>
+  </li>
+  <li>추가기능:
+    <ol>
+      <li>❌ 저장소를 분할하여 여러 사용자가 사용할수 있게끔하기</li>
+      <li>❌ 로그인 기능 구현하기</li>
+    </ol>
+  </li>
+  <li>만족기능:
+    <ol>
+      <li>❌ 다양한 글꼴 및 크기 제공하기</li>
+      <li>❌ 자간, 줄긴격 조절하기</li>
+      <li>❌ 배경색 변화 주기, 블루라이팅 줄여보기</li>
+      <li>❌ 눈 깜빡임 메시지 띄우기</li>
+    </ol>
+  </li>
+</ul>
+
+<h2 id="output">Output</h2>
+<video controls="">
+  <source src="/assets/imgs/post_23/output.mp4" type="video/mp4" />
+Your browser does not support the video tag.
+</video>
+
+<h2 id="contents">Contents</h2>
+<h3 id="서버-구축">서버 구축</h3>
+<p>가장 처음 이 프로젝트를 기획했을 때는 <code class="language-plaintext highlighter-rouge">&lt;input type='file'&gt;</code> 태그를 사용하여 만드려 했었습니다. 하지만 보안상의 문제로 Explorer를 제외한 브라우저에서는 작동하지 않는 것을 깨닫고 다른 방법을 생각하던 중 서버를 사용해보면 어떨까하는 생각이 들었습니다. 하여 서버에 파일을 업로드하고 불러오는 방향으로 개발을 진행해보았습니다.</p>
+
+<p>서버는 Node.js를 사용하여 구축하였고, 클라이언트는 Vue 라이브러리를 활용하여 만들었습니다.</p>
+
+<p>추가로, 파일을 읽어오기 위해 <code class="language-plaintext highlighter-rouge">fs</code> 모듈을, 라우팅을 직관적으로 표시하기 위해 <code class="language-plaintext highlighter-rouge">express</code> 모듈을, 파일을 업로드하는데 사용하기 위해 <code class="language-plaintext highlighter-rouge">multer</code> 모듈을 설치 및 사용하였습니다.</p>
+
+<p>❗ request의 body contents를 불러오기 위해선 body-parser 모듈을 사용했었지만, express 모듈이 해당 기능을 대체할 수 있습니다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// before</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">bodyParser</span><span class="p">.</span><span class="nx">urlencoded</span><span class="p">({</span><span class="na">extended</span><span class="p">:</span> <span class="kc">false</span><span class="p">}));</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">bodyParser</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+<span class="c1">// after</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">urlencoded</span><span class="p">({</span><span class="na">extended</span><span class="p">:</span> <span class="kc">false</span><span class="p">}));</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+</code></pre></div></div>
+
+<p>다음은 서버가 하는 일을 코드와 함께 간략하게 정리해보았습니다.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">GET</code>: <code class="language-plaintext highlighter-rouge">/</code> : Main 페이지를 띄웁니다.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="dl">'</span><span class="s1">./pages/index.html</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">utf8</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">text/html</span><span class="dl">'</span><span class="p">})</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+    <span class="p">})</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">GET</code>: <code class="language-plaintext highlighter-rouge">/files</code> : 저장소에 저장되어 있는 파일들의 이름을 반환합니다.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/files</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readdirSync</span><span class="p">(</span><span class="nx">__dirname</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">/storage</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">utf8</span><span class="dl">'</span><span class="p">)</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">GET</code>: <code class="language-plaintext highlighter-rouge">/files/:file</code> : <code class="language-plaintext highlighter-rouge">:file</code>에 들어간 “파일이름”으로 저장소에서 탐색하여 텍스트의 내용을 반환합니다. 이 때, 어디까지 읽었는지와 북마크의 유무에 대한 정보를 함께 반환합니다.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/files/:file</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">file</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">file</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s2">`./cache/datastore.json`</span><span class="p">,</span> <span class="dl">'</span><span class="s1">utf-8</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">datastore</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+        
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s2">`./storage/</span><span class="p">${</span><span class="nx">file</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span> <span class="dl">'</span><span class="s1">utf-8</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">datastore</span><span class="p">).</span><span class="nx">includes</span><span class="p">(</span><span class="nx">file</span><span class="p">))</span> 
+            <span class="nx">datastore</span><span class="p">[</span><span class="nx">file</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="na">scrollTop</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="na">bookmarkId</span><span class="p">:</span> <span class="kc">null</span>
+            <span class="p">};</span>
+            <span class="nx">res</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">text/json</span><span class="dl">'</span><span class="p">);</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span>
+                <span class="na">data</span><span class="p">:</span> <span class="nx">data</span><span class="p">,</span>
+                <span class="na">scrollTop</span><span class="p">:</span> <span class="nx">datastore</span><span class="p">[</span><span class="nx">file</span><span class="p">].</span><span class="nx">scrollTop</span><span class="p">,</span>
+                <span class="na">bookmarkId</span><span class="p">:</span> <span class="nx">datastore</span><span class="p">[</span><span class="nx">file</span><span class="p">].</span><span class="nx">bookmarkId</span>
+            <span class="p">})</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">POST</code>: <code class="language-plaintext highlighter-rouge">/uploadbookmark</code> : 현재 <code class="language-plaintext highlighter-rouge">:file</code>의 bookmark를 사용자 Cache에 저장합니다.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="dl">'</span><span class="s1">/uploadbookmark</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="p">{</span><span class="nx">title</span><span class="p">,</span> <span class="nx">scrollTop</span><span class="p">,</span> <span class="nx">bookmarkId</span><span class="p">}</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="dl">'</span><span class="s1">./cache/datastore.json</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">utf-8</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">datastore</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">datastore</span><span class="p">).</span><span class="nx">includes</span><span class="p">(</span><span class="nx">title</span><span class="p">))</span> 
+            <span class="nx">datastore</span><span class="p">[</span><span class="nx">title</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="na">scrollTop</span><span class="p">:</span> <span class="nx">scrollTop</span><span class="p">,</span>
+                <span class="na">bookmarkId</span><span class="p">:</span> <span class="nx">bookmarkId</span>
+            <span class="p">};</span>
+        <span class="k">else</span><span class="p">{</span>
+            <span class="nx">datastore</span><span class="p">[</span><span class="nx">title</span><span class="p">].</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="nx">scrollTop</span>
+            <span class="nx">datastore</span><span class="p">[</span><span class="nx">title</span><span class="p">].</span><span class="nx">bookmarkId</span> <span class="o">=</span> <span class="nx">bookmarkId</span>
+        <span class="p">}</span>
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFileSync</span><span class="p">(</span><span class="dl">'</span><span class="s1">./cache/datastore.json</span><span class="dl">'</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">datastore</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="dl">'</span><span class="s1">utf-8</span><span class="dl">'</span><span class="p">);</span>
+        <span class="c1">// res.set('Content-Type', 'text/json');</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">()</span>
+    <span class="p">})</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">POST</code>: <code class="language-plaintext highlighter-rouge">/uploadfile</code> : 저장소에 새로운 파일을 업로드합니다.</li>
+</ul>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="dl">'</span><span class="s1">/uploadfile</span><span class="dl">'</span><span class="p">,</span> <span class="nx">upload</span><span class="p">.</span><span class="nx">single</span><span class="p">(</span><span class="dl">'</span><span class="s1">file</span><span class="dl">'</span><span class="p">),</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">file</span><span class="p">)</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">204</span><span class="p">).</span><span class="nx">redirect</span><span class="p">(</span><span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<h3 id="텍스트-읽어오기">텍스트 읽어오기</h3>
+<p>앞서 설명한 것처럼 ‘텍스트 읽어오기’ 기능은 <code class="language-plaintext highlighter-rouge">GET: /files/:file</code>에서 작동합니다.</p>
+
+<p>읽어올 파일명은 파라미터로 넘어온 <code class="language-plaintext highlighter-rouge">:file</code>에서 가져옵니다.</p>
+
+<p>본격적인 텍스트의 내용을 읽기 전에 사용자 Cache를 불러와 이전에 사용자가 해당 파일을 읽은 적이 있는지 여부를 판단합니다.</p>
+
+<p>사용자의 열람 유무를 바탕으로 텍스트의 내용과 북마크 유무, 그리고 어디까지 읽었는지를 함께 반환합니다.</p>
+
+<p>반환된 정보는 이후 html에 명시된 javascript와 vue를 통해 화면에 표시됩니다.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Server</span>
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/files/:file</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">file</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">file</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s2">`./cache/datastore.json`</span><span class="p">,</span> <span class="dl">'</span><span class="s1">utf-8</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">datastore</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+        
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s2">`./storage/</span><span class="p">${</span><span class="nx">file</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span> <span class="dl">'</span><span class="s1">utf-8</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">datastore</span><span class="p">).</span><span class="nx">includes</span><span class="p">(</span><span class="nx">file</span><span class="p">))</span> 
+            <span class="nx">datastore</span><span class="p">[</span><span class="nx">file</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="na">scrollTop</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="na">bookmarkId</span><span class="p">:</span> <span class="kc">null</span>
+            <span class="p">};</span>
+            <span class="nx">res</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">text/json</span><span class="dl">'</span><span class="p">);</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span>
+                <span class="na">data</span><span class="p">:</span> <span class="nx">data</span><span class="p">,</span>
+                <span class="na">scrollTop</span><span class="p">:</span> <span class="nx">datastore</span><span class="p">[</span><span class="nx">file</span><span class="p">].</span><span class="nx">scrollTop</span><span class="p">,</span>
+                <span class="na">bookmarkId</span><span class="p">:</span> <span class="nx">datastore</span><span class="p">[</span><span class="nx">file</span><span class="p">].</span><span class="nx">bookmarkId</span>
+            <span class="p">})</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
+<span class="p">})</span>
+<span class="c1">// Client</span>
+
+<span class="p">...</span>
+
+<span class="nx">fetch</span><span class="p">(</span><span class="s2">`http://localhost:3000/files/</span><span class="p">${</span><span class="nx">t</span><span class="p">.</span><span class="nx">innerText</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span> <span class="c1">// click한 파일명으로 서버에 요청을 보냄</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>                        <span class="c1">// json 데이터 파싱</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span> <span class="o">=</span> <span class="nx">res</span><span class="p">.</span><span class="nx">bookmarkId</span><span class="p">;</span>            <span class="c1">// Vue 어플리케이션의 data 값 변경</span>
+        <span class="nx">app</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="nx">res</span><span class="p">.</span><span class="nx">scrollTop</span><span class="p">;</span>              <span class="c1">// Vue 어플리케이션의 data 값 변경</span>
+        <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="se">\n</span><span class="dl">'</span><span class="p">);</span>                <span class="c1">// 읽은 텍스트 파일을 줄마다 잘라서 저장 =&gt; Array()</span>
+    <span class="p">})</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">app</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">res</span><span class="p">)</span>                    <span class="c1">// 배열형식의 데이터를 Vue data에 저장 =&gt; v-for를 사용해 화면에 표시됨</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span><span class="p">)</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">#ffc4bb</span><span class="dl">'</span><span class="p">;</span>   <span class="c1">// 북마크 표시</span>
+        <span class="nx">textplace</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="nx">app</span><span class="p">.</span><span class="nx">scrollTop</span><span class="p">;</span>                                                            <span class="c1">// 이전에 읽은 곳까지 이동</span>
+    <span class="p">})</span>
+</code></pre></div></div>
+
+<h3 id="파일-업로드하기">파일 업로드하기</h3>
+<p>앞서 말했듯이 파일업로드에는 <code class="language-plaintext highlighter-rouge">multer</code>모듈을 사용하였습니다.</p>
+
+<p>이 모듈을 사용하면 단일 파일을 업로드할 때 <code class="language-plaintext highlighter-rouge">upload.single('file')</code> 모듈을 앱에 등록하여 실행시켜주기만 하면 됩니다. 굉장히 간단하죠 :)</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="dl">'</span><span class="s1">/uploadfile</span><span class="dl">'</span><span class="p">,</span> <span class="nx">upload</span><span class="p">.</span><span class="nx">single</span><span class="p">(</span><span class="dl">'</span><span class="s1">file</span><span class="dl">'</span><span class="p">),</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">file</span><span class="p">)</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">204</span><span class="p">).</span><span class="nx">redirect</span><span class="p">(</span><span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<h2 id="code">Code</h2>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// server.js</span>
+<span class="kd">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">fs</span><span class="dl">'</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">express</span><span class="dl">'</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">multer</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">multer</span><span class="dl">'</span><span class="p">)</span>
+
+
+<span class="kd">let</span> <span class="nx">upload</span> <span class="o">=</span> <span class="nx">multer</span><span class="p">({</span>
+    <span class="na">storage</span><span class="p">:</span> <span class="nx">multer</span><span class="p">.</span><span class="nx">diskStorage</span><span class="p">({</span>
+        <span class="na">destination</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="dl">'</span><span class="s1">./storage/</span><span class="dl">'</span><span class="p">);</span>
+        <span class="p">},</span>
+        <span class="na">filename</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">originalname</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}),</span>
+<span class="p">})</span>
+<span class="kd">let</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">urlencoded</span><span class="p">({</span><span class="na">extended</span><span class="p">:</span> <span class="kc">false</span><span class="p">}));</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
+
+
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="dl">'</span><span class="s1">./pages/index.html</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">utf8</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span> <span class="p">:</span> <span class="dl">'</span><span class="s1">text/html</span><span class="dl">'</span><span class="p">})</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+    <span class="p">})</span>
+<span class="p">})</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/files</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readdirSync</span><span class="p">(</span><span class="nx">__dirname</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">/storage</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">utf8</span><span class="dl">'</span><span class="p">)</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">result</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">'</span><span class="s1">/files/:file</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">file</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">file</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s2">`./cache/datastore.json`</span><span class="p">,</span> <span class="dl">'</span><span class="s1">utf-8</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">datastore</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+        
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="s2">`./storage/</span><span class="p">${</span><span class="nx">file</span><span class="p">}</span><span class="s2">`</span><span class="p">,</span> <span class="dl">'</span><span class="s1">utf-8</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">datastore</span><span class="p">).</span><span class="nx">includes</span><span class="p">(</span><span class="nx">file</span><span class="p">))</span> 
+            <span class="nx">datastore</span><span class="p">[</span><span class="nx">file</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="na">scrollTop</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="na">bookmarkId</span><span class="p">:</span> <span class="kc">null</span>
+            <span class="p">};</span>
+            <span class="nx">res</span><span class="p">.</span><span class="kd">set</span><span class="p">(</span><span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">text/json</span><span class="dl">'</span><span class="p">);</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">({</span>
+                <span class="na">data</span><span class="p">:</span> <span class="nx">data</span><span class="p">,</span>
+                <span class="na">scrollTop</span><span class="p">:</span> <span class="nx">datastore</span><span class="p">[</span><span class="nx">file</span><span class="p">].</span><span class="nx">scrollTop</span><span class="p">,</span>
+                <span class="na">bookmarkId</span><span class="p">:</span> <span class="nx">datastore</span><span class="p">[</span><span class="nx">file</span><span class="p">].</span><span class="nx">bookmarkId</span>
+            <span class="p">})</span>
+        <span class="p">})</span>
+    <span class="p">})</span>
+    
+<span class="p">})</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="dl">'</span><span class="s1">/uploadbookmark</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="p">{</span><span class="nx">title</span><span class="p">,</span> <span class="nx">scrollTop</span><span class="p">,</span> <span class="nx">bookmarkId</span><span class="p">}</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="dl">'</span><span class="s1">./cache/datastore.json</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">utf-8</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">datastore</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">datastore</span><span class="p">).</span><span class="nx">includes</span><span class="p">(</span><span class="nx">title</span><span class="p">))</span> 
+            <span class="nx">datastore</span><span class="p">[</span><span class="nx">title</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="na">scrollTop</span><span class="p">:</span> <span class="nx">scrollTop</span><span class="p">,</span>
+                <span class="na">bookmarkId</span><span class="p">:</span> <span class="nx">bookmarkId</span>
+            <span class="p">};</span>
+        <span class="k">else</span><span class="p">{</span>
+            <span class="nx">datastore</span><span class="p">[</span><span class="nx">title</span><span class="p">].</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="nx">scrollTop</span>
+            <span class="nx">datastore</span><span class="p">[</span><span class="nx">title</span><span class="p">].</span><span class="nx">bookmarkId</span> <span class="o">=</span> <span class="nx">bookmarkId</span>
+        <span class="p">}</span>
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFileSync</span><span class="p">(</span><span class="dl">'</span><span class="s1">./cache/datastore.json</span><span class="dl">'</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">datastore</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="dl">'</span><span class="s1">utf-8</span><span class="dl">'</span><span class="p">);</span>
+        <span class="c1">// res.set('Content-Type', 'text/json');</span>
+        <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">()</span>
+    <span class="p">})</span>
+<span class="p">})</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="dl">'</span><span class="s1">/uploadfile</span><span class="dl">'</span><span class="p">,</span> <span class="nx">upload</span><span class="p">.</span><span class="nx">single</span><span class="p">(</span><span class="dl">'</span><span class="s1">file</span><span class="dl">'</span><span class="p">),</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">)</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">file</span><span class="p">)</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="p">(</span><span class="mi">204</span><span class="p">).</span><span class="nx">redirect</span><span class="p">(</span><span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">server on 3000 port</span><span class="dl">'</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"kr"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Text-Viewer by uowol<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"https://cdn.jsdelivr.net/npm/vue/dist/vue.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;style&gt;</span>
+        <span class="o">*</span><span class="p">{</span>
+            <span class="nl">box-sizing</span><span class="p">:</span> <span class="n">border-box</span><span class="p">;</span>
+
+        <span class="p">}</span>
+        <span class="nt">html</span><span class="o">,</span> <span class="nt">body</span><span class="p">{</span>
+            <span class="nl">width</span><span class="p">:</span> <span class="m">100vw</span><span class="p">;</span>
+            <span class="nl">height</span><span class="p">:</span> <span class="m">100vh</span><span class="p">;</span>
+            <span class="nl">padding</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+            <span class="nl">margin</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nf">#root</span><span class="p">{</span>
+            <span class="nl">display</span><span class="p">:</span> <span class="n">flex</span><span class="p">;</span>
+            <span class="nl">width</span><span class="p">:</span> <span class="m">100vw</span><span class="p">;</span>
+            <span class="nl">height</span><span class="p">:</span> <span class="m">100vh</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nc">.list</span><span class="p">{</span>
+            <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="no">black</span><span class="p">;</span>
+            <span class="nl">list-style-type</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span>
+            <span class="nl">height</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
+            <span class="nl">margin</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+            <span class="nl">padding</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nc">.item</span><span class="p">{</span>
+            <span class="nl">padding</span><span class="p">:</span> <span class="m">5px</span> <span class="m">10px</span><span class="p">;</span>
+            <span class="nl">border-bottom</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="m">#cccccc</span><span class="p">;</span>
+            <span class="nl">font-family</span><span class="p">:</span> <span class="s2">'Segoe UI'</span><span class="p">,</span> <span class="n">Tahoma</span><span class="p">,</span> <span class="n">Geneva</span><span class="p">,</span> <span class="n">Verdana</span><span class="p">,</span> <span class="nb">sans-serif</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nc">.list</span> <span class="o">&gt;</span> <span class="nt">a</span><span class="p">{</span>
+            <span class="nl">text-decoration</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span>
+            <span class="nl">color</span><span class="p">:</span> <span class="m">#2e2e2e</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nc">.nav-box</span><span class="p">{</span>
+            <span class="nl">overflow-y</span><span class="p">:</span> <span class="nb">auto</span><span class="p">;</span>
+            <span class="nl">width</span><span class="p">:</span> <span class="m">20%</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nc">.textplace</span><span class="p">{</span>
+            <span class="nl">overflow</span><span class="p">:</span> <span class="nb">auto</span><span class="p">;</span>
+            <span class="nl">flex-grow</span><span class="p">:</span> <span class="m">1</span><span class="p">;</span>
+            <span class="nl">padding</span><span class="p">:</span> <span class="m">10px</span><span class="p">;</span>
+            <span class="nl">max-width</span><span class="p">:</span> <span class="m">80%</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nc">.filedrag</span><span class="p">{</span>
+            <span class="nl">background-color</span><span class="p">:</span> <span class="m">#2e2e2e</span><span class="p">;</span>
+            <span class="nl">color</span><span class="p">:</span> <span class="m">#eee</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="nt">&lt;/style&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;form</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">action=</span><span class="s">"/uploadfile"</span> <span class="na">method=</span><span class="s">"POST"</span> <span class="na">enctype=</span><span class="s">"multipart/form-data"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"nav-box"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"list"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;li</span> <span class="na">id=</span><span class="s">"filedrag"</span> <span class="na">class=</span><span class="s">"item filedrag"</span><span class="nt">&gt;</span>
+                    drag a new file on here.
+                <span class="nt">&lt;/li&gt;</span>
+                <span class="nt">&lt;li</span> <span class="na">v-for=</span><span class="s">"item in itemList"</span> <span class="na">class=</span><span class="s">"item"</span> <span class="err">@</span><span class="na">mouseover=</span><span class="s">"mouseOverEvent"</span> <span class="err">@</span><span class="na">mouseout=</span><span class="s">"mouseOut"</span> <span class="err">@</span><span class="na">click=</span><span class="s">"click"</span><span class="nt">&gt;</span>
+                    
+                <span class="nt">&lt;/li&gt;</span>
+            <span class="nt">&lt;/ul&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"textplace"</span> <span class="na">id=</span><span class="s">"textplace"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;p</span> <span class="na">v-for=</span><span class="s">"(t,i) in text"</span> <span class="na">class=</span><span class="s">"paragraph"</span> <span class="err">@</span><span class="na">click=</span><span class="s">"bookmarking"</span> <span class="na">:id=</span><span class="s">"'p'+i"</span><span class="nt">&gt;&lt;/p&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;input</span> <span class="na">id=</span><span class="s">"fileselect"</span> <span class="na">type=</span><span class="s">"file"</span> <span class="na">name=</span><span class="s">"file"</span> <span class="na">multiple=</span><span class="s">"multiple"</span> <span class="na">class=</span><span class="s">"addFile"</span> <span class="na">hidden</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">name=</span><span class="s">"submit"</span> <span class="na">id=</span><span class="s">"submitbutton"</span> <span class="na">hidden</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;/form&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+    <span class="c1">// index.html</span>
+    <span class="kd">let</span> <span class="nx">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+        <span class="na">el</span><span class="p">:</span> <span class="dl">"</span><span class="s2">#root</span><span class="dl">"</span><span class="p">,</span>
+        <span class="nx">data</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="na">itemList</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="na">text</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="na">scrollTop</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="na">now</span><span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+                <span class="na">bookmarkId</span><span class="p">:</span> <span class="kc">null</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nx">created</span><span class="p">()</span> <span class="p">{</span>
+        <span class="p">},</span>
+        <span class="nx">mounted</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">mount!</span><span class="dl">'</span><span class="p">)</span>
+        <span class="p">},</span>
+        <span class="nx">update</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">update!</span><span class="dl">'</span><span class="p">)</span>
+        <span class="p">},</span>
+        <span class="na">watch</span><span class="p">:</span> <span class="p">{</span>
+            <span class="na">text</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="c1">// alert(1)</span>
+                <span class="nx">textplace</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="nx">app</span><span class="p">.</span><span class="nx">scrollTop</span><span class="p">;</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">updated! </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">app</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">, </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">textplace</span><span class="p">.</span><span class="nx">scrollTop</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="na">methods</span><span class="p">:</span> <span class="p">{</span>
+            <span class="na">mouseOverEvent</span> <span class="p">:</span> <span class="p">({</span><span class="nx">target</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                <span class="nx">target</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">#eee</span><span class="dl">'</span>
+            <span class="p">},</span>
+            <span class="na">mouseOut</span> <span class="p">:</span> <span class="p">({</span><span class="nx">target</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                <span class="nx">target</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="dl">""</span>
+            <span class="p">},</span>
+            <span class="na">click</span><span class="p">:</span> <span class="p">({</span><span class="na">target</span><span class="p">:</span> <span class="nx">t</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                <span class="c1">// 현재 북마크 저장</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">now</span> <span class="o">&amp;&amp;</span> <span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span><span class="p">){</span>
+                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">save now file...!</span><span class="dl">'</span><span class="p">)</span>
+                    <span class="nx">fetch</span><span class="p">(</span><span class="s2">`http://localhost:3000/uploadbookmark`</span><span class="p">,</span> <span class="p">{</span>
+                        <span class="na">method</span><span class="p">:</span> <span class="dl">'</span><span class="s1">POST</span><span class="dl">'</span><span class="p">,</span>
+                        <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">application/json</span><span class="dl">'</span>
+                            <span class="c1">// 'Content-Type': 'application/x-www-form-urlencoded',</span>
+                        <span class="p">},</span>
+                        <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
+                            <span class="na">title</span><span class="p">:</span> <span class="nx">app</span><span class="p">.</span><span class="nx">now</span><span class="p">,</span>
+                            <span class="na">scrollTop</span><span class="p">:</span> <span class="nx">app</span><span class="p">.</span><span class="nx">scrollTop</span><span class="p">,</span>
+                            <span class="na">bookmarkId</span><span class="p">:</span> <span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span>
+                        <span class="p">})</span>
+                    <span class="p">}).</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">load new file...!</span><span class="dl">'</span><span class="p">)</span>
+                        <span class="c1">// 새 파일 불러오기</span>
+                        <span class="nx">app</span><span class="p">.</span><span class="nx">now</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">innerText</span><span class="p">;</span>
+                        <span class="k">if</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span><span class="p">)</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">transparent</span><span class="dl">'</span><span class="p">;</span>
+                        <span class="nx">fetch</span><span class="p">(</span><span class="s2">`http://localhost:3000/files/</span><span class="p">${</span><span class="nx">t</span><span class="p">.</span><span class="nx">innerText</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+                            <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
+                            <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                                <span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span> <span class="o">=</span> <span class="nx">res</span><span class="p">.</span><span class="nx">bookmarkId</span><span class="p">;</span>
+                                <span class="nx">app</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="nx">res</span><span class="p">.</span><span class="nx">scrollTop</span><span class="p">;</span>
+                                <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="se">\n</span><span class="dl">'</span><span class="p">);</span>
+                            <span class="p">})</span>
+                            <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">app</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">res</span><span class="p">)</span>
+                            <span class="p">.</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">now</span><span class="p">,</span> <span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span><span class="p">)</span>
+                                <span class="k">if</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span><span class="p">)</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">#ffc4bb</span><span class="dl">'</span><span class="p">;</span>
+                                <span class="nx">textplace</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="nx">app</span><span class="p">.</span><span class="nx">scrollTop</span><span class="p">;</span>
+                            <span class="p">})</span>
+                    <span class="p">})</span>
+                <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                    <span class="nx">app</span><span class="p">.</span><span class="nx">now</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">innerText</span><span class="p">;</span>
+                    <span class="nx">fetch</span><span class="p">(</span><span class="s2">`http://localhost:3000/files/</span><span class="p">${</span><span class="nx">t</span><span class="p">.</span><span class="nx">innerText</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+                        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
+                        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                            <span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span> <span class="o">=</span> <span class="nx">res</span><span class="p">.</span><span class="nx">bookmarkId</span><span class="p">;</span>
+                            <span class="nx">app</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="nx">res</span><span class="p">.</span><span class="nx">scrollTop</span><span class="p">;</span>
+                            <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="se">\n</span><span class="dl">'</span><span class="p">);</span>
+                        <span class="p">})</span>
+                        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">app</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="nx">res</span><span class="p">)</span>
+                        <span class="p">.</span><span class="nx">then</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">now</span><span class="p">,</span> <span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span><span class="p">)</span>
+                            <span class="k">if</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span><span class="p">)</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">#ffc4bb</span><span class="dl">'</span><span class="p">;</span>
+                            <span class="nx">textplace</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="nx">app</span><span class="p">.</span><span class="nx">scrollTop</span><span class="p">;</span>
+                        <span class="p">})</span>
+                <span class="p">}</span>
+                
+            <span class="p">},</span>
+            <span class="na">bookmarking</span> <span class="p">:</span> <span class="p">(({</span><span class="na">target</span><span class="p">:</span> <span class="nx">t</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span><span class="p">)</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">transparent</span><span class="dl">'</span><span class="p">;</span>
+                <span class="nx">t</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">#ffc4bb</span><span class="dl">'</span>
+                <span class="nx">app</span><span class="p">.</span><span class="nx">bookmarkId</span> <span class="o">=</span> <span class="nx">t</span><span class="p">.</span><span class="nx">id</span>
+
+                <span class="nx">app</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="nx">textplace</span><span class="p">.</span><span class="nx">scrollTop</span><span class="p">;</span>
+                <span class="c1">// alert(app.scrollTop)</span>
+            <span class="p">}),</span>
+        <span class="p">}</span>
+    <span class="p">})</span>
+
+    <span class="nx">fetch</span><span class="p">(</span><span class="dl">'</span><span class="s1">http://localhost:3000/files</span><span class="dl">'</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">()).</span><span class="nx">then</span><span class="p">(</span><span class="nx">arr</span> <span class="o">=&gt;</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">v</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="nx">app</span><span class="p">.</span><span class="nx">itemList</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+    <span class="p">}))</span>
+
+    <span class="kd">const</span> <span class="nx">$id</span> <span class="o">=</span> <span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">FileDragHover</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
+        <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+        <span class="c1">// e.target.className = (e.type == "dragover" ? "hover" : "");</span>
+    <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">FileSelectHandler</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+	    <span class="c1">// cancel event and hover styling</span>
+        <span class="nx">FileDragHover</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+        <span class="c1">// fetch FileList object</span>
+        <span class="kd">var</span> <span class="nx">files</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">dataTransfer</span><span class="p">.</span><span class="nx">files</span><span class="p">;</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="nx">fileselect</span><span class="p">.</span><span class="nx">files</span> <span class="o">=</span> <span class="nx">files</span><span class="p">;</span>
+        <span class="nx">submitbutton</span><span class="p">.</span><span class="nx">click</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kd">let</span> <span class="nx">fileselect</span> <span class="o">=</span> <span class="nx">$id</span><span class="p">(</span><span class="dl">"</span><span class="s2">fileselect</span><span class="dl">"</span><span class="p">),</span>
+		<span class="nx">filedrag</span> <span class="o">=</span> <span class="nx">$id</span><span class="p">(</span><span class="dl">"</span><span class="s2">filedrag</span><span class="dl">"</span><span class="p">),</span>
+        <span class="nx">submitbutton</span> <span class="o">=</span> <span class="nx">$id</span><span class="p">(</span><span class="dl">"</span><span class="s2">submitbutton</span><span class="dl">"</span><span class="p">);</span>
+        
+    <span class="nx">fileselect</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">change</span><span class="dl">"</span><span class="p">,</span> <span class="nx">FileSelectHandler</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">upload</span><span class="p">)</span> <span class="p">{</span>
+
+		<span class="c1">// file drop</span>
+		<span class="nx">filedrag</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">dragover</span><span class="dl">"</span><span class="p">,</span> <span class="nx">FileDragHover</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+		<span class="c1">// filedrag.addEventListener("dragleave", FileDragHover, false);</span>
+		<span class="nx">filedrag</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">drop</span><span class="dl">"</span><span class="p">,</span> <span class="nx">FileSelectHandler</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+		<span class="c1">// filedrag.style.display = "block";</span>
+	<span class="p">}</span>
+
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+
+</code></pre></div></div>
+:ET
