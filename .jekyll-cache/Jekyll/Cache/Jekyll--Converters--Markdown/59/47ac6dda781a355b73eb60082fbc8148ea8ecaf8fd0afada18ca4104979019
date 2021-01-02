@@ -1,0 +1,15 @@
+I"<p>본 내용은 Coursera에서 Andrew ng 의 Machine Learning(기계학습, 머신러닝)을 수강한 내용을 정리한 것입니다. 이번 포스팅에선 Machine Learning이 무엇인지에 대해서 알아보겠습니다.</p>
+
+<h2 id="1머신러닝machine-learning">1.머신러닝(Machine Learning)</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Arthru Samuel (1959): Machine Learning is a field of study that gives computers the ability to learn without being explicitly programmed
+</code></pre></div></div>
+
+<p>Arthru Samuel은 기계학습을 <strong>명시적으로 프로그램이 작성되지 않아도 컴퓨터가 스스로 학습할 수 있는 능력을 제공하는 학문</strong>이라 정의하였습니다. 체커게임을 만들었던 Samuel은 사실 체커게임을 잘 두지 못했지만, 그의 컴퓨터로 하여금 수많은 게임을 플레이하게 하여 어느 위치에 있으면 이기는 경우가 많아지는 지를 분석하고 이기는 방법을 스스로 학습하게 하였으며 마침내 Samuel도 이길 수 없는 수준의 강자를 만들었습니다.</p>
+
+<p>하지만 위의 정의는 너무 모호하고 오래된 것이기에 머신러닝의 대가 톰 미첼(Tom Mitchell)이 정의한 머신러닝(Machine Learning)에 대해서 다시 설명하도록 하겠습니다.</p>
+
+<h2 id="참고한-페이지">참고한 페이지</h2>
+<p><a href="https://mangkyu.tistory.com/31?category=767742">망나니개발자의 블로그</a></p>
+
+:ET
