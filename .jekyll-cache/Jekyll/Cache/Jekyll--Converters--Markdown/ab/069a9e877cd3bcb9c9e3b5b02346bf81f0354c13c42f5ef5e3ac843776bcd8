@@ -1,0 +1,24 @@
+I"j<h2 id="참고">참고</h2>
+<p><a href="https://mangkyu.tistory.com/31?category=767742">망나니개발자님의 블로그</a></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>본 내용은 망나니개발자님이 Coursera에서 Andrew ng 의 Machine Learning(기계학습, 머신러닝)을 수강한 내용을 정리한 것을 바탕으로 작성된 글입니다. 
+</code></pre></div></div>
+
+<p>이번 포스팅에서는 모델과 비용함수(Model and Cost Function)에 대해서 알아보겠습니다.</p>
+
+<h2 id="1-multiple-featuresvariables">1. Multiple Features(Variables)</h2>
+
+<h3 id="-multiple-features-">[ Multiple Features ]</h3>
+<p>기존에는 하나의 X로 Y를 예측하는 상황이였습니다. 하지만 실제 현실에서는 다양한 변수들 즉, 여러 개의 X를 통하여 Y를 예측하는 경우의 문제가 대부분입니다. 그러므로 우리는 4개의 Features를 가지는 문제에 대해서 알아보도록 하겠습니다. 아래의 그림에서는 Size, Number of bedrooms, Number of floors, Age of home이라는 4가지 변수를 통해서 Price를 예측하고 있습니다. 앞으로 이러한 다중 변수 상황에 대비하기위해 표기법을 정의하고 넘어가도록 하겠습니다.</p>
+
+<p><img src="https://t1.daumcdn.net/cfile/tistory/99D588345A489AFC01" alt="그림1" /></p>
+
+<h3 id="-notation표기법-">[ Notation(표기법) ]</h3>
+
+<ul>
+  <li>$n$ : number of features</li>
+  <li>$x^i$ : input (features) variable or $i^th$ training example</li>
+  <li>$x^i_j$ : value of feature j in ith training example</li>
+</ul>
+
+:ET
