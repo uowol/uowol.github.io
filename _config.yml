@@ -2,9 +2,8 @@ title: Data Diary
 author: uowol
 email: alllhvhla@gmail.com
 description: > # this means to ignore newlines until "show_exerpts:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  This blog is related to Statistics, Data-Science, Machine-Learning, and some TMIs.
+  Thank you for visiting my blog :b
 show_excerpts: true # set to true to show excerpts on the homepage
 
 # Conversion
@@ -21,8 +20,8 @@ sass:
 
 permalink: /posts/:title/
 texture:
-  title: Kim Chan-Woo
-  tagline: Developer. Statistician
+  title: Bread Factory
+  tagline: Create some exciting things everyday.
   date_format: "%b %-d, %Y"
   style: black
   showNav: true
