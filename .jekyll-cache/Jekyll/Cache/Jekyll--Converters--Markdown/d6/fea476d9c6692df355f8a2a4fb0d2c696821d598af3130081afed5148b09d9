@@ -1,0 +1,372 @@
+I"}=<h2 id="예제">예제</h2>
+<p>다음은 Q-Learning을 활용해 구현해본 길찾기 어플리케이션입니다. 이번 포스팅에서는 Q-Learning에 대해 간략히 설명하고 아래 어플리케이션을 만들어보면서 활용하는 방법을 익혀보겠습니다.</p>
+
+<p>사용방법</p>
+<ol>
+  <li>init
+    <ul>
+      <li>빈 칸을 1번 클릭하면 ‘벽’, 2번 클릭하면 ‘함정’, 3번 클릭하면 ‘도착지’, 4번 클릭하면 ‘빈 공간’이 만들어집니다.</li>
+      <li>빈 칸을 오른쪽 클릭하면 ‘출발지’로 설정할 수 있습니다.</li>
+      <li>도착지와 출발지는 하나씩만 존재할 수 있습니다.</li>
+    </ul>
+  </li>
+  <li>learn
+    <ul>
+      <li>[학습 시작하기] 버튼을 누르면 마우스 이벤트 대신 키보드 이벤트를 받기 시작합니다.</li>
+      <li>상/하/좌/우 키로 파란 블럭을 움직일 수 있으며 ‘도착지’ 또는 ‘함정’에 빠지면 다시 처음 위치로 돌아옵니다.</li>
+      <li>학습이 완료되었다는 상태메시지가 뜨기 전까지 계속하여 블럭을 도착지까지 옮겨줍니다.</li>
+    </ul>
+  </li>
+  <li>start
+    <ul>
+      <li>학습이 완료되었다면 [학습 결과 확인하기] 버튼을 눌러 결과를 확인할 수 있습니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<div class="container" id="container">
+    <canvas id="canvas_background" width="600" height="400"></canvas>
+    <canvas id="canvas" width="600" height="400"></canvas>
+</div>
+
+<p style="text-align:center;"><button onclick="learn()">학습 시작하기</button>
+<button onclick="start()">학습 결과 확인하기</button></p>
+
+<script>
+    let learningRate=1.0, discount=0.9, t=0
+    
+    const ctx = canvas.getContext('2d');
+    const ctxBg = canvas_background.getContext('2d');
+    const floor = Math.floor;
+    let size = 50;
+    let wNum = 9
+    let hNum = 9
+    let boxWidth = size * wNum;
+    let boxHeight = size * hNum;
+    canvas_background.width = canvas.width = boxWidth;
+    container.style.height = boxHeight + 'px';
+    canvas_background.height = canvas.height = boxHeight;
+    let islearning = false
+    let iscomplete = false
+    let isstart = false
+    let endPoint = [-1, -1]
+    let startPoint = [-1, -1]
+    let now = [-1, -1]
+
+    const map = new Array(floor(boxHeight/size));
+    const weight = new Array(floor(boxHeight/size))
+
+    const init = () => {
+        for(let i=0; i<map.length; i++){
+            map[i] = new Array(floor(boxWidth/size)).fill(0);
+            weight[i] = new Array(floor(boxWidth/size))
+        }
+        for(let i = 0; i<weight.length;i++){
+            for(let j = 0;j<weight[i].length;j++){
+                weight[i][j]=new Array(4).fill(0)
+            }
+        }
+
+        for(let i = 0; i < floor(boxHeight/size); i++){
+            for(let j = 0; j < floor(boxWidth/size); j++){
+                ctxBg.strokeRect(j*size, i*size, size, size);
+            }
+        }
+    }
+
+    const getReward = (x, y) => {
+        if(map[y][x] == 2){
+            return -1
+        }
+        if(map[y][x] == 3){
+            return +1
+        }
+        return 0
+    }
+
+    const isWall = (x, y) => y < 0 || y >= hNum || x < 0 || x >= wNum || map[y][x] == 1 ? true : false;
+
+    const updateQvalue = (px, py, ax, ay, a) => {
+        let [x, y] = [px+ax, py+ay]
+        let r = getReward(x, y)
+        weight[py][px][a] = (1-learningRate)*weight[py][px][a] + learningRate*(r + discount*Math.max(...weight[y][x])) 
+        console.log(`${px}, ${py}, ${a} => ${weight[py][px][a]}`)
+        return r
+    }
+
+    const registerEvents = () => {
+        canvas.addEventListener('click', e => {
+            if(islearning) return false;
+
+            let {offsetX: rx, offsetY: ry} = e;
+            let [x, y] = [floor(rx/size), floor(ry/size)];
+
+            if(x == startPoint[0] && y == startPoint[1]) return false;
+
+            let value = ++map[y][x] % 4;
+            if(value == 0){ // none
+                ctx.clearRect(x*size, y*size, size, size);
+                return true;
+            }
+            if(value == 1){//wall
+                ctx.fillStyle = '#ccc';
+                ctx.fillRect(x*size, y*size, size, size);
+                return true;
+            }
+            if(value == 2){ //-1 point
+                ctx.fillStyle = 'red';
+                ctx.fillRect(x*size, y*size, size, size);
+                return true;
+            }
+            if(value == 3){//+1 point
+                if (endPoint.reduce((prev, cur) => prev + cur) != -2){
+                    let [px, py] = endPoint;
+                    map[py][px] = 0;
+                    ctx.clearRect(px*size, py*size, size, size);
+                }
+                endPoint = [x, y];
+                ctx.fillStyle = 'green';
+                ctx.fillRect(x*size, y*size, size, size);
+                return true;
+            }
+        });
+        canvas.addEventListener('contextmenu', e => {
+            if(islearning) return false;
+
+            let {offsetX: rx, offsetY: ry} = e;
+            let [x, y] = [floor(rx/size), floor(ry/size)];
+            map[y][x] = 4;
+            if (startPoint.reduce((prev, cur) => prev + cur) != -2){
+                let [px, py] = startPoint;
+                map[py][px] = 0;
+                ctx.clearRect(px*size, py*size, size, size);
+            }
+            startPoint = [x, y];
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(x*size, y*size, size, size);
+            return false
+        })
+        document.body.addEventListener('keydown', ({keyCode}) => {
+            if(!islearning) return false;
+            event.preventDefault();
+            event.stopPropagation();
+            let key = keyCode % 37;
+            let [x, y] = now
+            ctx.clearRect(x*size, y*size, size, size)
+            switch(key){
+                case 0: // left
+                    if(isWall(x-1, y)) break
+                    if(updateQvalue(x--, y, -1, 0, key)){
+                        [x, y] = startPoint;
+                        if(Math.max(...weight[y][x]) != 0){
+                            alert('학습이 완료되었습니다. start()를 실행할 수 있습니다.')
+                            iscomplete = true
+                        }
+                    }
+                    break
+                case 1: // top
+                    if(isWall(x, y-1)) break
+                    if(updateQvalue(x, y--, 0, -1, key)){
+                        [x, y] = startPoint;
+                        if(Math.max(...weight[y][x]) != 0){
+                            alert('학습이 완료되었습니다. start()를 실행할 수 있습니다.')
+                            iscomplete = true
+
+                        }
+                    }
+                    break
+                case 2: // right
+                    if(isWall(x+1, y)) break
+                    if(updateQvalue(x++, y, +1, 0, key)){
+                        [x, y] = startPoint;
+                        if(Math.max(...weight[y][x]) != 0){
+                            alert('학습이 완료되었습니다. start()를 실행할 수 있습니다.')
+                            iscomplete = true
+
+                        }
+                    }
+                    break
+                case 3: // bottom
+                    if(isWall(x, y+1)) break
+                    if(updateQvalue(x, y++, 0, +1, key)){
+                        [x, y] = startPoint;
+                        if(Math.max(...weight[y][x]) != 0){
+                            alert('학습이 완료되었습니다. start()를 실행할 수 있습니다.')
+                            iscomplete = true
+
+                        }
+                    }
+                    break
+            }
+            ctx.fillRect(x*size, y*size, size, size)
+            now = [x, y]
+        })
+    }
+    const learn = () => {
+        if(startPoint.reduce((prev, now) => prev + now) == -2 || endPoint.reduce((prev, now) => prev + now) == -2){
+            alert("출발지 또는 도착지가 설정되지 않았습니다.")
+            return false;
+        }
+        if(isstart) return false
+        ctx.fillStyle = 'blue'
+        now = startPoint;
+        islearning = true
+
+    }
+
+    const start = () => {
+        if(!iscomplete) {
+            alert("학습이 완료되지 않았습니다. learn()을 먼저 실행해주세요.")
+            return false;
+        }
+
+        isstart = true
+
+        ctx.clearRect(now[0]*size, now[1]*size, size, size);
+        now = startPoint;
+        let before = null;
+        let move = setInterval(()=>{
+            if(now[0] == endPoint[0] && now[1] == endPoint[1]){
+                clearInterval(move)
+            }
+            let [x, y] = now
+            if(before) ctx.clearRect(before[0]*size, before[1]*size, size, size)
+            ctx.fillRect(x*size, y*size, size, size)
+            let action = weight[y][x].indexOf(Math.max(...weight[y][x]))
+            if(action == 0){
+                x--
+            }else if(action == 1){
+                y--
+            }else if(action == 2){
+                x++
+            }else if(action == 3){
+                y++
+            }
+            before = [now[0], now[1]]
+            now = [x, y]
+        }, 500)
+    }
+    
+    init();
+    registerEvents();
+
+    
+</script>
+
+<hr />
+
+<h2 id="개념">개념</h2>
+
+<h3 id="-model-free-algorithm-">[ Model-Free Algorithm ]</h3>
+
+<p>기존의 Model-Based Algorithm은 <strong>Environment(환경)에 대해 알고 있으며 우리의 행동에 따른 환경의 변화를 알고 있습니다.</strong></p>
+
+<p>그에 반해 Model-Free Algorithm은 <strong>Environment(환경)에 대해 알지 못하고 Action에 따른 Next State와 Next Reward를 ‘수동적으로’ 얻게 됩니다.</strong> 조금 더 자세히 이야기해보면, Model-Free Algorithm의 Agent가 Action을 취하면 Environment는 그에 대한 Reward(보상)과 State를 반환합니다.</p>
+
+<p>이 알고리즘은 환경이 어떻게 동작하는지 모르기때문에 Exploration(탐사) 즉, 실제로 부딪혀가며 <strong>Trail and Error를 반복해 Policy Function을 점차 학습</strong>시켜야 합니다.</p>
+
+<p style="text-align:center;"><img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&amp;fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FqTURh%2FbtqBOsVDNcz%2FH9KgbAldN1olQjXbEKa7Bk%2Fimg.png" alt="그림1" />
+<br />
+<small>그림출처: <a href="https://mangkyu.tistory.com/61?category=767742">망나니개발자</a></small></p>
+
+<p><br /></p>
+
+<h3 id="-q-learning-">[ Q-Learning ]</h3>
+
+<p>Q-Learning은 <strong>Model 없이(Model-Free) 학습하는 강화학습 알고리즘</strong> 즉, Environment(환경)에 대해 알지 못하고 Action(활동)에 따른 결과(Next State, Next Reward)를 받아 Exploration(탐험)을 통해 점차 학습시키는 알고리즘입니다.</p>
+
+<p>Q-Learning의 목표는 유한한 마르코프 결정 과정(FMDP)에서 <strong>Agent가 특정 상황에서 특정 행동을 하라는 최적의 Policy를 배우는 것</strong>으로, 현재 상태로부터 시작하여 모든 연속적인 단계들을 거쳤을 때 전체 보상의 예측값을 극대화시킵니다.</p>
+
+<p>이는 한 상태에서 다른 상태로의 전이가 확률적으로 일어나거나 보상이 확률적으로 주어지는 환경에서도 별다른 변형 없이 적용될 수 있습니다.</p>
+
+<p><br /></p>
+
+<h3 id="-q-value-">[ Q-Value ]</h3>
+<p>Q-Learning에서는 어떤 State S에서 어떤 Action A를 했을 때, 그 행동이 가지는 Value를 계산하는 Q-Value를 사용하는데, 이를 행동-가치 함수라고도 부릅니다.</p>
+
+<p>여기서 ‘Q’는 현재 상태에서 취한 행동의 보상에 대한 quality를 상징합니다.</p>
+
+<p>이러한 행동-가치 함수는 Discount Factor(할인계수)를 사용하여 특정 Action을 취했을 때, Episode가 종료되기까지 reward의 총합의 예측값을 계산합니다.</p>
+
+<p>현재 상태로부터 $Δt$ 시간이 흐른 후에 얻는 보상 $r$은  $γ^{Δt}$ 만큼 할인되어 $r∗γ^{Δt}$로 계산되는데 여기서 $γ$ 는 0~1사이의 값을 갖는 Discount Factor로 현재 얻는 보상이 미래에 얻는 보상보다 얼마나 더 중요한지를 의미합니다.</p>
+
+<p><br /></p>
+
+<h3 id="-q-learning-algorithm-">[ Q-Learning Algorithm ]</h3>
+<p>알고리즘이 시작되기 전에 Q 함수는 고정된 임의의 값을 갖습니다. 그리고 매 time-step($t$)마다 Agent는 행동 $a_t$를 선택하고 보상 $r_t$를 받으며 새로운 상태 $s_{t+1}$로 전이하고 Q값을 갱신합니다.</p>
+
+<p>이것을 수식으로 나타내면 아래와 같습니다.</p>
+
+\[Q(s_t,a_t)←(1−α)⋅\underbrace{Q(s_t,a_t)}_{\text{old value}}+\underbrace{α}_{\text{learning rate}}⋅\left(\overbrace{\underbrace{r_t}_{\text{reward}}+\underbrace{γ}_{\text{discount factor}}⋅\underbrace{\max_aQ(s_{t+1}, a)}_{\text{estimate of optimal future value}}}^{\text{learned value}}\right)\]
+
+<hr />
+
+<h2 id="예제-실습">예제 실습</h2>
+
+<h3 id="0-platform">0. Platform</h3>
+<ul>
+  <li>HTML, JavaScript</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="1-ui-제작">1. UI 제작</h3>
+<p>작성한 프로그램을 화면에 출력하기 위해선 UI를 만들어주어야 합니다. 저는 HTML과 CSS를 사용해 화면을 구성하고 JavaScript를 적용하여 사용자의 이벤트에 반응할 수 있도록 구현해주었습니다.</p>
+
+<p>이 때, 화면에 격자나 기타 도형들을 그리기 위해 <code class="language-plaintext highlighter-rouge">&lt;canvas&gt;</code> tag를 사용했습니다.</p>
+
+<p>UI는 간단하고 직관적입니다. N*M 크기의 격자가 주어지고 클릭 이벤트에 반응하여 벽이나 함정, 또는 출발지와 도착지, 즉 환경(Environment)을 직접 구성할 수 있게 하였습니다.</p>
+
+<p>또한, 이후 Learn 단계에서 키보드 이벤트에 반응하여 Action과 그에 따른 Q-value의 업데이트가 일어나도록 만들었습니다.</p>
+
+<p style="text-align:center"><img src="/assets/imgs/post_32/example1.png" alt="그림2" /></p>
+
+<ul>
+  <li>회색 타일 : 벽 =&gt; 진행할 수 없습니다.</li>
+  <li>파랑색 타일 : 출발지 =&gt; 출발지입니다.</li>
+  <li>빨강색 타일 : 함정 =&gt; reward로 -1 을 반환합니다.</li>
+  <li>초록색 타일 : 도착지 =&gt; reward로 +1 을 반환합니다.</li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="2-step">2. Step</h3>
+<p>해당 프로그램은 크게 세 단계로 작동합니다.</p>
+
+<ol>
+  <li><strong>환경(Environment) 구축하기</strong>
+    <ul>
+      <li>클릭 이벤트에 따라 빈 칸에 벽, 함정, 출발지, 도착지를 생성할 수 있습니다.</li>
+      <li>이 때, 출발지와 도착지는 개수가 하나로 고정되어 있습니다.</li>
+      <li>또한, 이 때 키보드 이벤트는 처리하지 않습니다.<br /><br /></li>
+    </ul>
+  </li>
+  <li>직접 <strong>개체를 움직여(Action) 학습시키기(Q-value Update)</strong>
+    <ul>
+      <li>방향키에 따라 파란색 개체(Entity)를 이동시킬 수 있습니다.</li>
+      <li>개체는 출발지에서부터 움직입니다.</li>
+      <li>이 때, 마우스 이벤트는 처리하지 않습니다.<br /><br /></li>
+    </ul>
+  </li>
+  <li>학습이 끝나면 <strong>결과 확인하기</strong>
+    <ul>
+      <li>학습이 완료되면 해당 메시지가 출력됩니다.</li>
+      <li>확인하기 버튼을 눌러 학습된 움직임을 확인할 수 있습니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<style scoped="">
+    *{
+        box-sizing: border-box;
+    }
+    .container{
+        position: relative;
+    }
+    canvas{
+        position: absolute;
+        border: 1px solid #2e2e2e;
+    }
+</style>
+
+:ET

@@ -1,5 +1,0 @@
-I"°<div class="_container" id="container">
-    <canvas id="canvas_background" width="600" height="400"></canvas>
-    <canvas id="canvas" width="600" height="400"></canvas>
-</div>
-:ET
