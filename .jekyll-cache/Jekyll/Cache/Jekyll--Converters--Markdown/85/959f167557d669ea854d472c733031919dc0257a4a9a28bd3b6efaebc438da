@@ -1,0 +1,164 @@
+I"�<p>군대 이전에도 수학을 잘 한다고는 못하는 실력에 군대까지 다녀오니 아무래도 수학을 다시 공부해야 할 것 같아서 이렇게 정리해보았습니다.</p>
+
+<p>이번 포스팅엔 고등학교 1학년 수학까지의 기본 개념들을 간단하게 정리해보겠습니다.</p>
+
+<h2 id="1-지수함수와-로그함수">1. 지수함수와 로그함수</h2>
+
+<h3 id="-지수-">[ 지수 ]</h3>
+
+<ol>
+  <li>거듭제곱과 거듭제곱근
+    <ul>
+      <li>거듭제곱: 어떤 수를 반복해서 곱하는 것<br />ex) $2^2, 2^4, 3^3$</li>
+      <li>밑: 곱하는 수</li>
+      <li>지수: 곱한 횟수</li>
+    </ul>
+
+    <p><img src="/assets/imgs/post_33/그림1.png" width="300" alt="그림1" /></p>
+
+    <ul>
+      <li>지수법칙
+        <ol>
+          <li>$a^m\times a^n=a^{m+n}$</li>
+          <li>$(a^m)^n = a^{mn}$</li>
+          <li>$(ab)^m = a^mb^m$</li>
+        </ol>
+      </li>
+      <li>제곱근: 제곱해서 실수 $a$가 되는 수 = $a$의 제곱근<br />ex) $x^2=a \iff x = \pm \sqrt{a}, \quad \text{x는 a의 제곱근}$
+        <ul>
+          <li>a의 n 제곱근 = $a</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="-로그-">[ 로그 ]</h3>
+
+<p style="text-align:center;">“2를 몇 제곱해야 16이 되나요?”</p>
+
+\[2^4 = 16 \Rightarrow \log_2(16) = 4\]
+
+<p><br /></p>
+
+<ol>
+  <li>정의 : $\log_b(a) = c \iff b^c=a$
+    <ul>
+      <li>b: 밑, c: 지수, a: 진수</li>
+      <li>변수의 조건
+        <ol>
+          <li>$b &gt; 0$</li>
+          <li>$b \neq 1$</li>
+          <li>$a &gt; 0$ ($b^c=a&gt;0$)</li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>상용로그 = $\log_10(x) = \log(x)$</p>
+  </li>
+  <li>자연로그 = $\log_e(x) = \ln(x)$
+    <ul>
+      <li>💡 자연상수 e란? : 약 2.718인 무리수, 극한값과 관련이 있고 미적분 파트에서 자세히 다룰 예정입니다.</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="2-수열">2. 수열</h2>
+
+<h3 id="-등차수열-">[ 등차수열 ]</h3>
+
+<ul>
+  <li>
+    <p>$\left\{a_{k}\right\}_{k=1}^\infty = \{3, 5, 7, …\}$</p>
+  </li>
+  <li>
+    <p>첫번째 항: 3, 공차: 2</p>
+  </li>
+</ul>
+
+<ol>
+  <li>
+    <p>점화식<br />$ \begin{cases}a_k=3\quad(k=1) \\ a_k=a_{k-1}+2\quad(k&gt;1)\end{cases} $</p>
+  </li>
+  <li>
+    <p>n으로 나타낸 식<br />$ a_k = 3 + 2(k-1)$</p>
+  </li>
+</ol>
+
+<h3 id="-등차급수-">[ 등차급수 ]</h3>
+
+<ul>
+  <li>등차수열의 합
+    <ul>
+      <li>$S_n = 1 + 2 + … + n$<br />$S_n = n + (n-1) + … + 1$<br />$2S_n = \underbrace{(n+1) + (n+1) + … + (n+1)}_{\text{n개}}$<br />$\Rightarrow S_n = \frac{n(n+1)}{2}$</li>
+    </ul>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="-등비수열-">[ 등비수열 ]</h3>
+
+<ul>
+  <li>
+    <p>$\left\{a_{k}\right\}_{k=1}^\infty = \{1, 2, 4, 8, 16, …\}$</p>
+  </li>
+  <li>
+    <p>첫번째 항: 1, 공비: 2</p>
+  </li>
+</ul>
+
+<ol>
+  <li>
+    <p>점화식<br />$ \begin{cases}a_k=1\quad(k=1) \\ a_k=2a_{k-1}\quad(k&gt;1)\end{cases} $</p>
+  </li>
+  <li>
+    <p>n으로 나타낸 식<br />$ a_k = 1 \times 2^{k-1}$</p>
+  </li>
+</ol>
+
+<h3 id="-등비급수-">[ 등비급수 ]</h3>
+
+<ul>
+  <li>등비수열의 합
+    <ul>
+      <li>첫번째 항: $a$, 공비: $r$</li>
+      <li>$S_n = a + ar + ar^2 + … + ar^{n}$<br />$\Rightarrow S_n = \frac{a+ar^n}{1-r}$</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="3-대칭이동">3. 대칭이동</h2>
+
+<ul>
+  <li>요약
+  <img src="/assets/imgs/post_33/그림2.png" width="300" alt="그림2" /></li>
+</ul>
+
+<ol>
+  <li>x축 대칭
+    <ul>
+      <li>$\Rightarrow -f(x)</li>
+    </ul>
+  </li>
+  <li>y축 대칭
+    <ul>
+      <li>$\Rightarrow f(-x)</li>
+    </ul>
+  </li>
+  <li>원점 대칭
+    <ul>
+      <li>$\Rightarrow -f(-x)</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="4-단위원-정의">4. 단위원 정의</h2>
+:ET
