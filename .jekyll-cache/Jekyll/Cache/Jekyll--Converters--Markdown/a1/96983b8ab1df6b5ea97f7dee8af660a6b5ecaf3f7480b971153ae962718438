@@ -1,0 +1,57 @@
+I"�<p>이번 포스팅에선 함수를 분석하고 여러가지 함수의 형태를 미분해보도록 하겠습니다.</p>
+
+<h2 id="존재정리">존재정리</h2>
+<p>존재정리는 아래에서 다룰 세가지 정리를 말하는데, <strong>평균값정리(MVT)</strong>, <strong>중간값정리(IVT)</strong>, <strong>최대최소정리(EVT)</strong>를 일컫습니다.</p>
+
+<h3 id="-평균값정리mean-value-theorem-">[ 평균값정리(Mean Value Theorem) ]</h3>
+
+\[\left.
+\begin{array}{l}
+\text{f가 [a, b]에서 연속이다.}\\
+\text{f가 (a, b)에서 미분가능하다.}
+\end{array}
+\right\} \Rightarrow \text{[a, b]에서 f의 평균변화율, 즉, 할선의 기울기와 동일한 기울기를 갖는 접선이 적어도 하나 존재한다.}\]
+
+\[\Rightarrow \text{구간 (a, b)에 }f'(c)=\frac{f(b)-f(a)}{b-a}\text{를 만족하는 점 c가 존재한다.}\]
+
+<p><br /></p>
+
+<h3 id="-중간값정리intermediate-value-theorem-">[ 중간값정리(Intermediate Value Theorem) ]</h3>
+
+\[\text{f가 [a, b]에서 연속이다.} \Rightarrow \text{[a, b]에 f(a)와 f(b)사이에 있는 모든 값이 존재한다.}\]
+
+<p><br /></p>
+
+<h3 id="-최대최소정리extreme-value-theorem-">[ 최대최소정리(Extreme Value Theorem) ]</h3>
+
+\[\text{f가 [a, b]에서 연속이다.} \Rightarrow \exists \begin{cases}
+\text{구간 [a, b] 안에 f의 최대값이 존재한다.}\\
+\\
+\text{구간 [a, b] 안에 f의 최소값이 존재한다.}
+\end{cases}\]
+
+\[\exists \text{ c, d } \in \text{[a, b]}, \quad f(c) \leq f(x) \leq f(d) \text{ for all x }\in \text{[a, b]}\]
+
+<hr />
+
+<h2 id="함수-분석하기">함수 분석하기</h2>
+
+<h3 id="-임계점-">[ 임계점 ]</h3>
+
+<p>임계점이란, 함수의 미분계수 값이 0이거나 존재하지 않는 점을 일컫습니다.</p>
+
+\[\begin{cases}
+f'(a) = 0\\
+\\
+f'(a) \text{ undefined}
+\end{cases}\]
+
+<p style="text-align:center;"><img src="/assets/imgs/post_39/그림1.png" alt="그림1" width="600" /></p>
+
+<p>위 그림과 같이 그래프를 그려보면, 임계점의 경우 극대 혹은 극소값이 될 수도 있지만 예외 역시 존재합니다.</p>
+
+<p><br /></p>
+
+<h3 id="-최대값-최소값-">[ 최대값 최소값 ]</h3>
+
+:ET
