@@ -1,0 +1,19 @@
+<div id="navbar">
+	<ul id='links'>
+	</ul>
+</div>
+<script>
+    window.onload = e => {
+
+        let dates = document.getElementsByClassName('date')
+        for(let i = 0; i < dates.length; i++){
+            let link = dates[i]
+            let a = document.createElement('a')
+            a.href = "#" + link.id
+            let li = document.createElement('li')
+            li.innerHTML = link.innerText
+            a.appendChild(li)
+            links.appendChild(a)
+        }
+    }
+</script>
