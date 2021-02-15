@@ -1,0 +1,95 @@
+I"<p>이번 포스팅에선 정규모집단에서의 여러 표본분포 중 t 분포에 대해 알아보겠습니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>이 포스팅은 영지문화사의 '일반통계학' 책을 참고하여 작성되었습니다.
+</code></pre></div></div>
+
+<p><a href="/posts/post-49">1. 카이제곱분포</a></p>
+
+<p>-&gt; <a href="/posts/post-50">2. t분포</a> &lt;-</p>
+
+<p><a href="#">3. F분포</a></p>
+
+<h2 id="1-t-분포">1. t 분포</h2>
+
+<h3 id="-스튜던트화studentization-">[ 스튜던트화(Studentization) ]</h3>
+
+<p>$X_1, \cdots, X_n$ 이 정규모집단 $N(\mu, \sigma^2)$ 으로부터의 랜덤표본일 때, 표본평균 $\bar X$ 로</p>
+
+\[\bar X \sim N(\mu, \frac{\sigma^2}{n})\text{ 즉, } \frac{\bar X - \mu}{\sigma / \sqrt n} \sim N(0,1)\]
+
+<p>위와 같이 <strong>정규화</strong>된 표본평균의 분포를 얻을 수 있습니다. 하지만 위 식은 $\sigma$ 를 알고있어야 사용할 수 있는데 실제로 그런 경우는 굉장히 드뭅니다.</p>
+
+<p>이 때 $\mu$ 대신 표본표준편차인 $S = \sqrt{\sum_{i=1}^n(X_i - \bar X)/(n-1)}$ 을 대입하여 <strong>스튜던트화</strong>된 표본평균의 분포를 얻을 수 있습니다.</p>
+
+\[\frac{\bar X - \mu}{S / \sqrt n} \sim t(n-1)\]
+
+<p>여기서 활용되는 t 분포가 무엇인지 알아봅시다.</p>
+
+<p><br /></p>
+
+<h3 id="-t-분포-">[ t 분포 ]</h3>
+
+<p>표준정규분포 $N(0,1)$ 을 따르는 확률변수를 $Z$ 라 하고 이와는 독립이며 자유도 $k$인 카이제곱분포를 따르는 확률변수를 $V$ 라고 할 때,</p>
+
+\[T = \frac{Z}{\sqrt{V/k}}\]
+
+<p>의 분포를 자유도 $k$ 인 t 분포라고 합니다. 이를 기호로 표기하면 아래와 같습니다.</p>
+
+\[T \sim t(k)\]
+
+<p><br /></p>
+
+<h3 id="-t-분포의-형태-">[ t 분포의 형태 ]</h3>
+
+<p>t 분포는 정규모집단에서 표본의 크기가 작을 때 특히 유용하게 쓰이는 분포로서, 표준정규분포와 마찬가지로 0을 중심으로 좌우대칭형이지만 표준정규분포에 비하여 두터운 꼬리를 가지고 있습니다.</p>
+
+<p style="text-align:center;"><img src="https://wikidocs.net/images/page/73465/T-DIST_3.PNG" alt="그림1" width="600" /><br />
+<small>출처: wikidocs-Must Learning with R</small></p>
+
+<p>위 그림은 자유도가 3인 t 분포의 형태입니다. 자유도가 커질수록 즉, 표본의 크기가 커질수록 $S$ 값이 $\sigma$ 값에 근사하게 되고 t 분포가 표준정규분포에 근사합니다.</p>
+
+<p><br /></p>
+
+<h3 id="-t-분포의-1-alpha-분위수-">[ t 분포의 $(1-\alpha)$ 분위수 ]</h3>
+
+<p>t 분포 역시 각 자유도 $k$에 따른 $(1-\alpha)$ 분위수가 구해져있습니다.</p>
+
+<p>자유도가 $k$ 인 t 분포의 $(1-\alpha)$ 분위수는 흔히 $t_\alpha(k)$ 로 나타냅니다.</p>
+
+\[P\{T \ge t_\alpha^2(k)\} = \alpha, \quad T\sim t(k)\]
+
+<p><br /></p>
+
+<h3 id="-스튜던트화된-표본평균의-분포-">[ 스튜던트화된 표본평균의 분포 ]</h3>
+
+<p>이제 t 분포에 대해 얼추 설명이 된 것 같으니 앞에서 언급한 스튜던트화된 표본평균의 분포에 대해 알아보겠습니다.</p>
+
+<p>스튜던트화된 표본평균을 다시 써보면</p>
+
+\[\frac{\bar X - \mu}{S/\sqrt{n}} = \frac{(\bar X - \mu)/(\frac{\sigma}{\sqrt{n}})}{\sqrt{\frac{(n-1)S^2}{\sigma^2}/(n-1)}}\]
+
+<p>이고, $(\bar X - \mu)/(\frac{\sigma}{\sqrt{n}}) \sim N(0, 1) \Rightarrow Z, \frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1) \Rightarrow V$ 입니다.</p>
+
+<p>덧붙여 $\bar X$ 와 $S^2$ 은 서로 독립임이 알려져있습니다.(현재 수준을 넘으므로 생략하겠습니다.)</p>
+
+<p>따라서 t 분포의 정의에 따라 $\frac{\bar X - \mu}{S/\sqrt{n}}$ 는 자유도 $(n-1)$ 인 t 분포를 따르게 됩니다.</p>
+
+\[\frac{\bar X - \mu}{S/\sqrt{n}} \sim t(n-1)\]
+
+<p><br /></p>
+
+<h3 id="-분산이-동일한-두-정규모집단에서의-t-분포-">[ 분산이 동일한 두 정규모집단에서의 t 분포 ]</h3>
+
+<p>이번엔 분산이 동일한 두 정규모집단 $N(\mu_1, \sigma^2), N(\mu_2, \sigma^2)$ 에 대하여 생각해봅시다.</p>
+
+<p>카이제곱분포에서와 마찬가지로 $S_1^2, S_2^2, S_p^2$ 을 정의해보면</p>
+
+\[\frac{(\bar X - \bar Y) - (\mu_1 - \mu_2)}{S_p\sqrt{\frac{1}{n_1}+\frac{1}{n2}}} = \frac{[(\bar X - \bar Y)] / (\sigma\sqrt{\frac{1}{n_1}+\frac{1}{n2}})}{\sqrt{\frac{(n_1+n_2-2)S_p^2}{\sigma^2}/(n_1+n_2-2)}}\]
+
+<p>와 같이 나타낼 수 있고</p>
+
+\[[(\bar X - \bar Y)] / (\sigma\sqrt{\frac{1}{n_1}+\frac{1}{n2}}) \sim N(0, 1)\]
+
+\[\]
+
+:ET
