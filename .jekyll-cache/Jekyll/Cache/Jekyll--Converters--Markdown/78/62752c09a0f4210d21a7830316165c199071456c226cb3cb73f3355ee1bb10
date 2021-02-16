@@ -1,0 +1,19 @@
+I"U<p>이번 포스팅에선 정규모집단에서의 여러 표본분포 중 F 분포에 대해 알아보겠습니다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>이 포스팅은 영지문화사의 '일반통계학' 책을 참고하여 작성되었습니다.
+</code></pre></div></div>
+
+<p><a href="/posts/post_49">1. 카이제곱분포</a></p>
+
+<p><a href="/posts/post_50">2. t분포</a></p>
+
+<p>-&gt; <a href="/posts/post_51">3. F분포</a> &lt;-</p>
+
+<h2 id="1-f-분포">1. F 분포</h2>
+
+<h3 id="-f-분포-">[ F 분포 ]</h3>
+
+<p>두 정규모집단의 분산을 비교할 때 분산비에 관한 추론에 이용되는 분포로서 다음과 같은 F 분포가 있습니다.</p>
+
+<p style="text-align:center;"><img src="/assets/imgs/post_49/그림1.png" alt="그림1" width="600" /></p>
+:ET
