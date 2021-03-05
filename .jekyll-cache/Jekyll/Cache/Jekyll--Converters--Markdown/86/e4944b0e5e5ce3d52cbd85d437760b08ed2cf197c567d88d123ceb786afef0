@@ -1,0 +1,147 @@
+I"�<p>최근에 TRPG를 알게되어 이것저것 찾아보던 중 흥미가 일어 간단히 만들어 본 프로그램입니다.</p>
+
+<p>&lt;!DOCTYPE html&gt;</p>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
+    <title>설정놀이</title>
+    <style>
+        .btn{
+            width: 100px;
+
+        }
+        .box{
+            border: 1px solid #2e2e2e;
+        }
+    </style>
+</head>
+<body>
+    <input class="btn" type="button" onclick="addS()" value="설정추가" />
+    <!-- <input class="btn" type='button' onclick="extractS()" value="설정추출">-->
+    <br /><br />
+    설정 저장하기 : <input class="btn" id="btn_save" type="button" onclick="saveS()" data-clipboard-target="#save_data" value="저장" />
+    <input type="text" name="save_data" id="save_data" readonly="" /><br />
+    설정 불러오기 : <input class="btn" id="btn_load" type="button" onclick="loadS()" value="데이터입력" />
+    <hr />
+    <div class="box" id="box_btn_settings">
+        <input type="button" onclick="addLine()" value="줄 추가" />
+    </div>
+    <hr />
+    <div class="box" id="box_output_settings">
+
+    </div>
+</body>
+<script>
+    new ClipboardJS('#btn_save')
+
+    const div_box_btn_settings = document.getElementById('box_btn_settings')
+    const div_box_output_settings = document.getElementById('box_output_settings')
+
+    let categories = []
+    
+    class Category{
+        constructor(category){
+            this.category = category
+            this.settings = []
+            this.isUsed = []
+            this.cntUsed = 0
+            this.isEmpty = true
+        }
+        add(setting){
+            this.settings.push(setting)
+            this.isUsed.push(0)
+            this.isEmpty = false
+        }
+        pop(idx){
+            if(this.isUsed[idx]) return false
+
+            this.isUsed[idx] = 1
+            if(++this.cntUsed === this.settings.length){
+                this.isEmpty = true
+            }
+            return this.settings[idx]
+        }
+        reset(){
+            this.isUsed = new Array(this.settings.length).fill(0)
+            this.cntUsed = 0
+            this.isEmpty = this.settings.length === 0 ? true : false
+        }
+    }
+    class Setting{
+        constructor(content){
+            this.content = content
+        }
+    }
+    const addS = ()=>{
+        let text_category = prompt('추가할 속성의 카테고리를 입력하세요.')
+        let text_content = prompt('추가할 속성의 내용을 입력하세요.')
+
+        for(let tmp_category of categories){
+            if(tmp_category.category == text_category){
+                let setting = new Setting(text_content)
+                tmp_category.add(setting)
+                return true
+            }
+        }
+
+        let category = new Category(text_category)
+        let setting = new Setting(text_content)
+        category.add(setting)
+        categories.push(category)
+
+        let btn_category = document.createElement('input')
+        btn_category.value = text_category
+        btn_category.type = 'button'
+        btn_category.onclick = function() {extractS(category)}
+
+        div_box_btn_settings.appendChild(btn_category)
+
+        return true
+    }
+    const extractS = (category)=>{
+        let settings = category.settings
+
+        if(category.isEmpty) return false
+
+        let rand_num = parseInt(Math.random()*settings.length)
+        while(category.isUsed[rand_num]){
+            rand_num = parseInt(Math.random()*settings.length)
+        }
+        
+        let p_setting = document.createElement('p')
+        p_setting.innerText = category.pop(rand_num).content
+
+        div_box_output_settings.appendChild(p_setting)
+
+    }
+    const addLine = ()=>{
+        div_box_output_settings.appendChild(document.createElement('hr'))
+        categories.map(category => category.reset())
+    }
+    const saveS = ()=>{
+        categories.map(category => category.reset())
+        save_data.value = JSON.stringify(categories)
+        // alert('미구현')
+    }
+    const loadS = ()=>{
+        let data = prompt('세이브 데이터를 입력하세요.')
+        categories = JSON.parse(data)
+
+        for(let category of categories){
+            category.__proto__ = Category.prototype
+
+            let btn_category = document.createElement('input')
+            btn_category.value = category.category
+            btn_category.type = 'button'
+            btn_category.onclick = function() {extractS(category)}
+
+            div_box_btn_settings.appendChild(btn_category)
+        }
+        // alert('미구현')
+    }
+</script>
+</html>
+:ET
