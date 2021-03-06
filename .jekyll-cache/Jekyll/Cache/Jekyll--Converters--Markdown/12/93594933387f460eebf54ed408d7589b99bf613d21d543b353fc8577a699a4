@@ -1,0 +1,102 @@
+I"J<h2 id="행렬matrix">행렬(Matrix)</h2>
+<h3 id="-행렬이란-">[ 행렬이란? ]</h3>
+<p>수 또는 다항식을 직사각형 모양으로 배열한 것</p>
+
+<p style="text-align:center;"><img src="/assets/imgs/post_54/그림1.png" alt="그림1" width="400" /></p>
+
+<p><br /></p>
+
+<h3 id="-행렬-neq-행렬식-">[ 행렬 $\neq$ 행렬식? ]</h3>
+
+<ul>
+  <li>행렬
+    <ul>
+      <li>수 또는 다항식을 직사각형 모양으로 배열한 것</li>
+    </ul>
+  </li>
+</ul>
+
+\[\begin{pmatrix}
+2 &amp; 3 \\
+4 &amp; 5
+\end{pmatrix} = A\]
+
+<ul>
+  <li>행렬식(determinant)
+    <ul>
+      <li>행렬을 대표하는 값</li>
+      <li>N$\times$N 정방행렬, ($n \ge 2$)</li>
+      <li>💡 정방행렬 = 정사각행렬 = (행의크기=열의크기)인 행렬</li>
+    </ul>
+  </li>
+</ul>
+
+\[\begin{vmatrix}
+2 &amp; 3 \\
+4 &amp; 5
+\end{vmatrix} = det A\]
+
+\[det A = a_{11}detA_{11} - a_{12}detA_{12} + ... + (-1)^{n+1}detA_{1n}\\detA_{11} : \text{1행 1열을 제외한 행렬의 행렬식}\]
+
+\[=\sum_{i=1}^n(-1)^{i+1}a_idetA_{1i}\]
+
+<p><br /></p>
+
+<h3 id="-전치행렬-">[ 전치행렬 ]</h3>
+
+<p>행렬 $A$ 의 행 $\leftrightarrow$ 열</p>
+
+<p>$\Rightarrow A’(A^T)$</p>
+
+<p><br /></p>
+
+<h3 id="-연립방정식의-해-구하기-">[ 연립방정식의 해 구하기 ]</h3>
+
+\[\begin{cases}
+2x+3y=1\\
+x+2y=3
+\end{cases}\]
+
+<h4 id="1-gauss-소거법">1. Gauss 소거법</h4>
+<ul>
+  <li>계속 이어서 확장시킬 수 있습니다.</li>
+</ul>
+
+<p style="text-align:center;"><img src="/assets/imgs/post_54/그림2.png" alt="그림2" width="400" /><br />
+<small>Ax = b</small></p>
+
+<h4 id="2-cramer-공식">2. Cramer 공식</h4>
+<ul>
+  <li>미지수 벡터 x는 아래 공식을 활용하여 구할 수 있습니다.</li>
+  <li>미지수의 개수는 식의 개수와 동일합니다.</li>
+</ul>
+
+\[x_1 = \frac{\Delta_1}{\Delta}, x_2 = \frac{\Delta_2}{\Delta}, \quad \Delta = \begin{cases}\text{행렬 A의 행렬식} \\ \text{행렬 A에서 n열의 값을 \color{red}{b}로 바꾼 행렬식}\end{cases}\]
+
+\[\therefore x = \frac{\begin{vmatrix}\color{red}{1} &amp; 3 \\ \color{red}{3} &amp; 2\end{vmatrix}}{\begin{vmatrix}2 &amp; 3 \\ 1 &amp; 2\end{vmatrix}}, y = \frac{\begin{vmatrix}2 &amp; \color{red}{1} \\ 1 &amp; \color{red}{3}\end{vmatrix}}{\begin{vmatrix}2 &amp; 3 \\ 1 &amp; 2\end{vmatrix}}\]
+
+<hr />
+
+<h2 id="벡터">벡터</h2>
+
+<h3 id="-벡터란-">[ 벡터란? ]</h3>
+<p>벡터는 수학적으로 크기와 방향을 가지고 있는 물리량을 의미합니다.</p>
+
+<p><br /></p>
+
+<h3 id="-연산-">[ 연산 ]</h3>
+
+<ul>
+  <li>덧셈연산
+    <ul>
+      <li>$\mathbf a + \mathbf b = (a_1+b_1, a_2+b_2)$ <br /><br /></li>
+    </ul>
+  </li>
+  <li>곱셈연산
+    <ol>
+      <li>상수배(실수배) $k\mathbf a = (ka_1, ka_2)$</li>
+      <li>스칼라곱(dot product) = 내적 : $\mathbf a \dot \mathbf b = \Vert  \mathbf a  \Vert $</li>
+    </ol>
+  </li>
+</ul>
+:ET

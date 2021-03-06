@@ -1,0 +1,294 @@
+I"#<h1 id="행렬matrix">행렬(Matrix)</h1>
+<h3 id="-행렬이란-">[ 행렬이란? ]</h3>
+<p>수 또는 다항식을 직사각형 모양으로 배열한 것</p>
+
+<p style="text-align:center;"><img src="/assets/imgs/post_54/그림1.png" alt="그림1" width="400" /></p>
+
+<p><br /></p>
+
+<h3 id="-행렬-neq-행렬식-">[ 행렬 $\neq$ 행렬식? ]</h3>
+
+<ul>
+  <li>행렬
+    <ul>
+      <li>수 또는 다항식을 직사각형 모양으로 배열한 것</li>
+    </ul>
+  </li>
+</ul>
+
+\[\begin{pmatrix}
+2 &amp; 3 \\
+4 &amp; 5
+\end{pmatrix} = A\]
+
+<ul>
+  <li>행렬식(determinant)
+    <ul>
+      <li>행렬을 대표하는 값</li>
+      <li>N$\times$N 정방행렬, ($n \ge 2$)</li>
+      <li>💡 정방행렬 = 정사각행렬 = (행의크기=열의크기)인 행렬</li>
+    </ul>
+  </li>
+</ul>
+
+\[\begin{vmatrix}
+2 &amp; 3 \\
+4 &amp; 5
+\end{vmatrix} = det A\]
+
+\[det A = a_{11}detA_{11} - a_{12}detA_{12} + ... + (-1)^{n+1}detA_{1n}\\detA_{11} : \text{1행 1열을 제외한 행렬의 행렬식}\]
+
+\[=\sum_{i=1}^n(-1)^{i+1}a_idetA_{1i}\]
+
+<p><br /></p>
+
+<h3 id="-전치행렬-">[ 전치행렬 ]</h3>
+
+<p>행렬 $A$ 의 행 $\leftrightarrow$ 열</p>
+
+<p>$\Rightarrow A’(A^T)$</p>
+
+<p><br /></p>
+
+<h3 id="-연립방정식의-해-구하기-">[ 연립방정식의 해 구하기 ]</h3>
+
+\[\begin{cases}
+2x+3y=1\\
+x+2y=3
+\end{cases}\]
+
+<h4 id="1-gauss-소거법">1. Gauss 소거법</h4>
+<ul>
+  <li>계속 이어서 확장시킬 수 있습니다.</li>
+</ul>
+
+<p style="text-align:center;"><img src="/assets/imgs/post_54/그림2.png" alt="그림2" width="400" /><br />
+<small>Ax = b</small></p>
+
+<h4 id="2-cramer-공식">2. Cramer 공식</h4>
+<ul>
+  <li>미지수 벡터 x는 아래 공식을 활용하여 구할 수 있습니다.</li>
+  <li>미지수의 개수는 식의 개수와 동일합니다.</li>
+</ul>
+
+\[x_1 = \frac{\Delta_1}{\Delta}, x_2 = \frac{\Delta_2}{\Delta}, \quad \Delta = \begin{cases}\text{행렬 A의 행렬식} \\ \text{행렬 A에서 n열의 값을 } \color{red}{b}\text{로 바꾼 행렬식}\end{cases}\]
+
+\[\therefore x = \frac{\begin{vmatrix}\color{red}{1} &amp; 3 \\ \color{red}{3} &amp; 2\end{vmatrix}}{\begin{vmatrix}2 &amp; 3 \\ 1 &amp; 2\end{vmatrix}}, y = \frac{\begin{vmatrix}2 &amp; \color{red}{1} \\ 1 &amp; \color{red}{3}\end{vmatrix}}{\begin{vmatrix}2 &amp; 3 \\ 1 &amp; 2\end{vmatrix}}\]
+
+<hr />
+
+<h1 id="벡터vector">벡터(Vector)</h1>
+
+<h3 id="-벡터란-">[ 벡터란? ]</h3>
+<p>벡터는 수학적으로 크기와 방향을 가지고 있는 물리량을 의미합니다.</p>
+
+<p><br /></p>
+
+<h3 id="-연산-">[ 연산 ]</h3>
+
+<ul>
+  <li>덧셈연산
+    <ul>
+      <li>$\vec a + \vec b = (a_1+b_1, a_2+b_2)$ <br /><br /></li>
+    </ul>
+  </li>
+  <li>곱셈연산
+    <ol>
+      <li>상수배(실수배) $k\vec a = (ka_1, ka_2)$</li>
+      <li>스칼라곱(dot product) = 내적, 스칼라 반환 : $\vec a \cdot \vec b = \Vert \vec a \Vert \Vert \vec b \Vert \cos \theta$</li>
+      <li>벡터곱(cross product) = 외적, 벡터 반환 : <br />$\vec a \times \vec b =-\vec b \times \vec a=\vec n \Vert \vec a \Vert \Vert \vec b \Vert \sin \theta$</li>
+    </ol>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h3 id="-벡터의-8가지-성질-">[ 벡터의 8가지 성질 ]</h3>
+<p>-&gt; 벡터공간의 성질</p>
+
+<p>A1 : $\vec u + \vec v = \vec v + \vec u$  (‘+’ 교환법칙)</p>
+
+<p>A2 : $(\vec u + \vec v) + \vec w = \vec u + (\vec v + \vec w)$ (‘+’ 결합법칙)</p>
+
+<p>A3 : $\vec u + \vec 0 = \vec 0 + \vec u$ ($\vec 0$ = ‘+’ 항등원)</p>
+
+<p>A4 : $\vec u + (-\vec u) = (-\vec u) + \vec u = \vec 0$</p>
+
+<p>S1 : $a(\vec u + \vec v) = a\vec u + b\vec v$</p>
+
+<p>S2 : $(a+b)\vec u =a\vec u + b\vec u$</p>
+
+<p>S3 : $a(b\vec u) = (ab)\vec u$</p>
+
+<p>S4 : $1\vec u = \vec u 1 = \vec u$ (1 = 스칼라곱에 대한 항등원)</p>
+
+<p>(A1 ~ A4) : 덧셈의 성질, (S1 ~ S4) : 스칼라곱의 성질</p>
+
+<hr />
+
+<h1 id="벡터공간vector-space">벡터공간(Vector-space)</h1>
+
+<h3 id="-벡터공간이란-">[ 벡터공간이란? ]</h3>
+
+<p>$V$ 라는 집합(Set)이 있고</p>
+
+\[\forall \vec u, \vec v \in V, \quad \vec u + \vec v \in V\]
+
+<p>라는 덧셈에 대한 가정과</p>
+
+\[\forall \text{스칼라 }a, \quad \forall \vec v \in V, \quad a\vec v \in V\]
+
+<p>라는 스칼라곱에 대한 가정을 세웠을 때, 앞서 다룬 벡터의 8가지 성질((A1 ~ A4), (S1 ~ S4))을 만족하면 집합 $V$ 를 벡터공간이라고 합니다.</p>
+
+<p>즉, 아래 과정을 거치면 어떤 집합 $V$ 가 벡터공간인지 판별할 수 있습니다.</p>
+
+<ol>
+  <li>
+    <p>덧셈에 대한 가정이 유효한지 확인</p>
+  </li>
+  <li>
+    <p>스칼라곱에 대한 가정이 유효한지 확인</p>
+  </li>
+  <li>
+    <p>벡터의 성질 8가지를 만족하는지 확인</p>
+  </li>
+  <li>
+    <p>(추가로,) 벡터공간은 원점($\vec 0$)이 있어야 합니다.</p>
+  </li>
+</ol>
+
+<p><br /></p>
+
+<h3 id="-유클리드공간-">[ 유클리드공간 ]</h3>
+
+\[\Bbb R, \quad \forall \vec v \in \Bbb R \rightarrow \text{직선}\]
+
+\[\Bbb R^2, \quad \forall \vec v \in \Bbb R^2 \rightarrow \text{평면}\]
+
+\[\Bbb R^3, \quad \forall \vec v \in \Bbb R^3 \rightarrow \text{공간}\]
+
+\[\Bbb R^n = \{\vec v = (v_1, v_2, \cdots , v_n) \vert v_i \in \Bbb R, i = 1,2,\cdots,n\}\]
+
+<p><br /></p>
+
+<h3 id="-다항식-벡터공간-">[ 다항식 벡터공간 ]</h3>
+
+\[P_n = \{\sum_{i=1}^n a_i x^i \vert a_i \in \Bbb R\} : \text{ n차 이하인 x의 다항식의 집합}\]
+
+<p><br /></p>
+
+<h3 id="-함수공간-">[ 함수공간 ]</h3>
+
+\[F = \{f: \Bbb R \rightarrow \Bbb R \text{ 함수}\}\]
+
+\[\forall f, g, \text{스칼라} a \in F,\\
+(f+g)(x) = f(x) + g(x) \in F,\quad (af)(x) = af(x) \in F\]
+
+<p><br /></p>
+
+<h3 id="-무한차원공간-">[ 무한차원공간 ]</h3>
+
+\[\Bbb R^\infty = \{(a_1, a_2, \cdots) \vert a_i \in \Bbb R\}\]
+
+<p><br /></p>
+
+<h3 id="-행렬공간-">[ 행렬공간 ]</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>추후에 배울 예정입니다.
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="부분공간sub-space">부분공간(Sub-space)</h1>
+
+<p>유클리드공간 $\Bbb R$ 이 벡터공간이라는 것은 앞서 이야기한 바 있습니다.</p>
+
+\[\forall a, b \in \Bbb R, \quad a+b \in \Bbb R\]
+
+\[\forall a \text{ is scalar}, \quad \forall b \in \Bbb R, \quad a \times b \in \Bbb R\]
+
+<p>위 가정에도 모순이 없고 벡터공간의 성질(A1 ~ A4, S1 ~ S4) 또한 성립합니다.</p>
+
+<p>여기에 $E$ 라는 새로운 집합이 있다고 생각해봅시다.</p>
+
+\[E = \text{ 짝수인 실수의 집합}\]
+
+\[E \subset \Bbb R \text{ 부분집합}\]
+
+<p>$E$ 는 $\Bbb R$ 의 부분집합이고, 덧셈 및 스칼라곱 연산은 동일하게 적용됩니다. 이러한 집합 $E$ 를 부분공간이라고 합니다.</p>
+
+<p><br /></p>
+
+<h3 id="-부분공간의-정의-">[ 부분공간의 정의 ]</h3>
+
+<p>엄밀히 말하면 벡터부분공간이 맞지만 간편하게 줄여서 부분공간이라고 부릅니다.</p>
+
+\[V = \Bbb R \text{ 위에서 벡터공간}\]
+
+\[W \subset V \text{ 부분집합}\]
+
+\[\text{(1) } \forall \vec w_1, \vecw_2 \in W, \quad \vec w_1 + \vec w_2 \in W\]
+
+\[\text{(2) } \forall a \text{ is scalar}, \quad \forall \vec w \in W, \quad a\vec w \in W\]
+
+\[\text{(3) } \vec 0 \in W\]
+
+<p>부분공간임을 확인하기 위해선 위 3가지 조건을 확인할 수 있습니다.</p>
+
+<p><br /></p>
+
+<h3 id="-부분공간의-예-">[ 부분공간의 예 ]</h3>
+
+<p>들어가기 앞서, 0 벡터 즉, $\vec 0$ 는 자명한 벡터공간임을 알고 있습니다. 뿐만 아니라 모든 벡터공간은 $\vec 0$ 을 부분집합으로 갖습니다.</p>
+
+<h4 id="11-bbb-r2-의-부분공간">1.1. $\Bbb R^2$ 의 부분공간</h4>
+
+<ol>
+  <li>
+    <p>{$\vec 0$}</p>
+  </li>
+  <li>
+    <p>{$a\vec v \vert a \in \Bbb R$} : 차원이 1인 부분공간을 나타냅니다.</p>
+  </li>
+  <li>
+    <p>{$\Bbb R^2$}</p>
+  </li>
+</ol>
+
+<h4 id="12-bbb-r3-의-부분공간">1.2. $\Bbb R^3$ 의 부분공간</h4>
+
+<ol>
+  <li>
+    <p>{$\vec 0$}</p>
+  </li>
+  <li>
+    <p>{$a\vec v \vert a \in \Bbb R$} : 차원이 1인 부분공간(직선)을 나타냅니다.</p>
+  </li>
+  <li>
+    <p>{$a\vec v + b\vec w \vert a,b \in \Bbb R$} : 차원이 2인 부분공간(평면)을 나타냅니다.</p>
+  </li>
+  <li>
+    <p>{$\Bbb R^3$}</p>
+  </li>
+</ol>
+
+<h4 id="2-c--fbbb-ab-rightarrow-rtext-연속인-함수들">2. $C = {f:\Bbb [a,b] \rightarrow R\text{ 연속인 함수들}}$</h4>
+
+<p>$F = {f:\Bbb [a,b] \rightarrow R\text{ 모든 함수들}}$</p>
+
+<p>$C \subset F\text{ 부분집합}$ 이고, $F$ 는 벡터공간(함수공간)이므로 $C$ 는 부분공간이라고 할 수 있습니다.</p>
+
+<p><br /></p>
+
+<h3 id="-정리하면서-">[ 정리하면서, ]</h3>
+
+<p>어떤 집합 $V$ 가 부분공간임을 확인하기 위해선 두 가지 방법을 사용할 수 있다.</p>
+
+<ol>
+  <li>$V$ 가 벡터공간인가,
+    <ul>
+      <li>$V$ 가 벡터공간이고, 어떤 집합 $E$ 의 부분공간</li>
+    </ul>
+  </li>
+</ol>
+:ET
