@@ -1,0 +1,21 @@
+I"+<h2 id="todo">Todo</h2>
+<ul>
+  <li>선형결합(Linear-combination)</li>
+  <li>선형종속과 선형독립 (일차종속과 일차독립)</li>
+  <li>벡터공간을 생성하다(span)</li>
+</ul>
+
+<hr />
+
+<h1 id="선형결합">선형결합</h1>
+
+<p>기본적으로 선형결합과 일차결합은 같은 대상을 의미합니다.</p>
+
+<h3 id="-정의-">[ 정의 ]</h3>
+
+\[\vec v_1, \cdots, \vec v_k : \text{ vector}\]
+
+\[a_1, \cdots, a_k : \text{ scalar}\]
+
+\[a_1 \vec v_1 + \cdots + a_k \vec v_k : \text{ \vec v_1 , \cdots, \vec v_k 의 선형결합}\]
+:ET
