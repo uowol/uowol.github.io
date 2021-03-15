@@ -1,4 +1,4 @@
-title: Bread Factory
+title: 나만고양이없어's Blog
 author: uowol
 email: alllhvhla@gmail.com
 description: > # this means to ignore newlines until "show_exerpts:"
@@ -30,7 +30,7 @@ texture:
 
   # generate social links in footer
   social_links:
-    twitter: uowol
+    # twitter: uowol
     github:  uowol
     rss: rss
  
