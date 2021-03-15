@@ -20,8 +20,8 @@ sass:
 
 permalink: /posts/:title/
 texture:
-  title: Bread Factory
-  tagline: Create some exciting things everyday.
+  title: 나만고양이없어's Blog
+  tagline: 이게 다 미래에 키워드릴 고양이님의 밥이되고 장난감이 된다는거죠.
   date_format: "%b %-d, %Y"
   style: black
   showNav: true
