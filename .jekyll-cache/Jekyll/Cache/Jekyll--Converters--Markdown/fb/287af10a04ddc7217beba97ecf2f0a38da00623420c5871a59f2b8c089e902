@@ -1,0 +1,23 @@
+I"�<h2 id="todo">Todo</h2>
+<ul>
+  <li>$W = \text{ span\{}\vec v_1, \vec v_2 \text{\}}$</li>
+  <li>선형변환(Linear transformation)</li>
+  <li>행렬(Matrix)</li>
+</ul>
+
+<hr />
+
+<h1 id="w--text-spanvec-v_1-vec-v_2-text">$W$ = $\text{ span\{}\vec v_1, \vec v_2 \text{\}}$</h1>
+
+<h3 id="-의미-">[ 의미 ]</h3>
+
+<p>$W$ = $\text{ span\{}\vec v_1, \vec v_2 \text{\}}$, 즉 $W$는 $\vec v_1, \vec v_2$ 의 선형결합으로 생성되는 벡터공간이며, <strong>$V$의 부분공간</strong>이다.</p>
+
+<p><br /></p>
+
+<h3 id="-증명-">[ 증명 ]</h3>
+
+<h4 id="가정-w-subset-v-부분집합">가정) $W \subset V$ 부분집합</h4>
+<p>\(W = \text{ span\{}\vec v_1, \vec v_2 \text{\}} = {k_1\vec v_1 + k_2\vec v_2}\)</p>
+
+:ET

@@ -1,0 +1,24 @@
+I"�<h2 id="todo">Todo</h2>
+<ul>
+  <li>표본공간의 분할(partition)</li>
+  <li>베이즈 공식(Bayes’ formula)</li>
+  <li>조건부 확률의 성질</li>
+</ul>
+
+<hr />
+
+<h1 id="표본공간의-분할partition">표본공간의 분할(partition)</h1>
+
+<h3 id="-정의-">[ 정의 ]</h3>
+
+<ul>
+  <li>
+    <p>$B_1, B_2, \cdots, B_n$ 이 서로 배반</p>
+  </li>
+  <li>
+    <p>$\Omega = \bigcup_{i=1}^n B_i$</p>
+  </li>
+</ul>
+
+<p>일 때, $\{B_1, B_2, \cdots, B_n\}$</p>
+:ET

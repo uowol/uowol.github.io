@@ -1,0 +1,33 @@
+I"�<h2 id="todo">Todo</h2>
+<ul>
+  <li>$W = \text{ span\{}\vec v_1, \vec v_2 \text{\}}$</li>
+  <li>선형변환(Linear transformation)</li>
+  <li>행렬(Matrix)</li>
+</ul>
+
+<hr />
+
+<h1 id="w--text-spanvec-v_1-vec-v_2-text">$W$ = $\text{ span\{}\vec v_1, \vec v_2 \text{\}}$</h1>
+
+<h3 id="-의미-">[ 의미 ]</h3>
+
+<p>$W$ = $\text{ span\{}\vec v_1, \vec v_2 \text{\}}$, 즉 $W$는 $\vec v_1, \vec v_2$ 의 선형결합으로 생성되는 벡터공간이며, <strong>$V$의 부분공간</strong>이다.</p>
+
+<p><br /></p>
+
+<h3 id="-증명-">[ 증명 ]</h3>
+
+<h4 id="가정-w-subset-v-부분집합">가정) $W \subset V$ 부분집합</h4>
+
+\[W = \text{ span\{}\vec v_1, \vec v_2 \text{\}} = {k_1\vec v_1 + k_2\vec v_2}\]
+
+<p>$k_1 \vec v_1 + k_2\vec v_2 \in V$ 는 벡터공간 $V$ 의 성질로 알 수 있으므로, $W$ 는 $V$ 의 부분집합임을 알 수 있습니다.</p>
+
+<h4 id="1-forall-vec-w_1-vec-w_2-in-w-quad-vec-w_1vec-w_2-in-w">1) $\forall \vec w_1, \vec w_2 \in W, \quad \vec w_1+\vec w_2 \in W$</h4>
+
+<h4 id="2-forall-a-text-scalar-forall-vec-w-in-w-quad-avec-w-in-w">2) $\forall a \text{ scalar}, \forall \vec w \in W, \quad a\vec w \in W$</h4>
+
+<h4 id="12-forall-a-b-text-scalar-forall-vec-w_1-vec-w_2-in-w-quad-avec-w_1--bvec-w_2-in-w">1+2) $\forall a, b \text{ scalar}, \forall \vec w_1, \vec w_2 \in W, \quad a\vec w_1 + b\vec w_2 \in W$</h4>
+
+<p>벡터공간의 부분공간임을 보이는 방법으로, 1) 과 2) 를 보이는 방법 외에 1+2) 를 보여 한 번에 증명하는 방법도 존재합니다.</p>
+:ET

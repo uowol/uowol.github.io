@@ -1,0 +1,135 @@
+I"�<h2 id="todo">Todo</h2>
+<ul>
+  <li>$W = \text{ span\{}\vec v_1, \vec v_2 \text{\}}$</li>
+  <li>선형변환(Linear transformation)</li>
+  <li>가우스 소거법</li>
+</ul>
+
+<hr />
+
+<h1 id="w--text-spanvec-v_1-vec-v_2-text">$W$ = $\text{ span\{}\vec v_1, \vec v_2 \text{\}}$</h1>
+
+<h3 id="-의미-">[ 의미 ]</h3>
+
+<p>$W$ = $\text{ span\{}\vec v_1, \vec v_2 \text{\}}$, 즉 $W$는 $\vec v_1, \vec v_2$ 의 선형결합으로 생성되는 벡터공간이며, <strong>$V$의 부분공간</strong>이다.</p>
+
+<p><br /></p>
+
+<h3 id="-증명-">[ 증명 ]</h3>
+
+<h4 id="가정-w-subset-v-부분집합">가정) $W \subset V$ 부분집합</h4>
+
+\[W = \text{ span\{}\vec v_1, \vec v_2 \text{\}} = {k_1\vec v_1 + k_2\vec v_2}\]
+
+<p>$k_1 \vec v_1 + k_2\vec v_2 \in V$ 는 벡터공간 $V$ 의 성질로 알 수 있으므로, $W$ 는 $V$ 의 부분집합임을 알 수 있습니다.</p>
+
+<h4 id="1-forall-vec-w_1-vec-w_2-in-w-quad-vec-w_1vec-w_2-in-w">1) $\forall \vec w_1, \vec w_2 \in W, \quad \vec w_1+\vec w_2 \in W$</h4>
+
+<h4 id="2-forall-a-text-scalar-forall-vec-w-in-w-quad-avec-w-in-w">2) $\forall a \text{ scalar}, \forall \vec w \in W, \quad a\vec w \in W$</h4>
+
+<h4 id="12-forall-a-b-text-scalar-forall-vec-w_1-vec-w_2-in-w-quad-avec-w_1--bvec-w_2-in-w">1+2) $\forall a, b \text{ scalar}, \forall \vec w_1, \vec w_2 \in W, \quad a\vec w_1 + b\vec w_2 \in W$</h4>
+
+<p>벡터공간의 부분공간임을 보이는 방법으로, 1) 과 2) 를 보이는 방법 외에 1+2) 를 보여 한 번에 증명하는 방법도 존재합니다.</p>
+
+\[W = \{k_1\vec w_1 + k_2\vec w_2 \vert k_1, k_2 \text{ scalar}\}\]
+
+\[w_1 = k_{11}\vec v_1 + k_{12}\vec v_2,\quad k_{11}, k_{12} \text{ scalar}\]
+
+\[w_2 = k_{21}\vec v_1 + k_{22}\vec v_2,\quad k_{21}, k_{22} \text{ scalar}\]
+
+\[\text{임의의 스칼라 }a, b, \quad a\vec w_1 + b\vec w_2 = a(k_{11}\vec v_1 + k_{12}\vec v_2)+ b(k_{21}\vec v_1 + k_{22}\vec v_2)\]
+
+\[= \underbrace{(ak_{11} + bk_{21})}_{\text{scalar}}\vec v_1 + \underbrace{(ak_{12} + bk{22})}_{\text{scalar}}\vec v_2 \in W\]
+
+<hr />
+
+<h1 id="선형변환linear-transformation">선형변환(Linear transformation)</h1>
+
+<h3 id="-정의-">[ 정의 ]</h3>
+
+\[U, V: \text{벡터공간}, \quad T: U \rightarrow V\]
+
+\[\forall \vec u_1, \vec u_2 \in U, \forall a_1, a_2 \text{ scalar}, \quad T(a_1\vec v_1 + a_2\vec v_2) = a_1T(\vec u_1) + a_2T(\vec u_2)\]
+
+<p>이 성립할 때, $T$ 를 벡터 $U$ 에서 벡터 $V$ 로의 선형변환이라고 합니다.</p>
+
+<p><br /></p>
+
+<h3 id="-선형변환의-치역과-영공간-">[ 선형변환의 치역과 영공간 ]</h3>
+
+<p>$T: U \rightarrow V$ 일 때,</p>
+
+\[\text{Range}(T) = \{T(\vec u) \vert \forall \vec u \in U\} : \text{ T의 치역}\]
+
+\[\text{Null}(T) = \{\vec u \vert \forall T(\vec u)=0, \forall \vec u \in U\} : \text{ T의 핵(kernel), 영공간}\]
+
+\[\vec u_1, \vec u_2 \in N(T) \Rightarrow T(\vec u_1)=0, T(\vec u_2) = 0\]
+
+\[\text{pf) } \vec u_1 + \vec u_2 = \begin{cases}T(\vec u_1 + \vec u_2) = T(\vec u_1) + T(\vec u_2) = 0 \\ T(k \vec u)=kT(\vec u) = 0\end{cases}\]
+
+<hr />
+
+<h1 id="가우스-소거법">가우스 소거법</h1>
+
+<h3 id="-연립방정식-풀이--가우스-소거법-">[ 연립방정식 풀이 : 가우스 소거법 ]</h3>
+
+\[\begin{pmatrix}
+3 &amp; 0 &amp; 2 \\
+-6 &amp; 5 &amp; 1 \\
+9 &amp; -5 &amp; 1
+\end{pmatrix}
+\begin{pmatrix}
+k_1\\
+k_2\\
+k_3
+\end{pmatrix}
+= \begin{pmatrix}
+0\\
+0\\
+0\end{pmatrix}
+\Rightarrow \begin{pmatrix}
+3 &amp; 0 &amp; 2 &amp; 0\\
+-6 &amp; 5 &amp; 1 &amp; 0\\
+9 &amp; -5 &amp; 1 &amp; 0
+\end{pmatrix}\]
+
+\[\begin{cases}
+3k_1 + 2k_3 = 0\\
+-6k_1+5k_2+k_3 = 0\\
+9k_1-5k_2+k_3 = 0
+\end{cases}\]
+
+\[\begin{pmatrix}
+\color{red}{3} &amp; 0 &amp; 2 &amp; 0\\
+\color{red}{0} &amp; 5 &amp; 5 &amp; 0\\
+\color{red}{0} &amp; -5 &amp; -5 &amp; 0
+\end{pmatrix} \Rightarrow \begin{pmatrix}
+3 &amp; 0 &amp; 2 &amp; 0\\
+0 &amp; \color{red}{1} &amp; \color{red}{1} &amp; 0\\
+0 &amp; -5 &amp; -5 &amp; 0
+\end{pmatrix}\]
+
+\[R1\times 2 + R2 \Rightarrow R2\]
+
+\[R1\times (-3) + R3 \Rightarrow R3\]
+
+\[\begin{cases}
+3k_1 + 2k_3 = 0\\
+k_2+k_2 = 0\\
+-5k_2-5k_3 = 0
+\end{cases}\]
+
+\[\begin{pmatrix}
+3 &amp; 0 &amp; 2 &amp; 0\\
+0 &amp; \color{red}{1} &amp; 5 &amp; 0\\
+0 &amp; \color{red}{0} &amp; 0 &amp; 0
+\end{pmatrix}\]
+
+\[R2\times 5 + R3 \Rightarrow R3\]
+
+\[\begin{cases}
+3k_1 + 2k_3 = 0\\
+k_2+k_2 = 0\\
+\end{cases}\]
+
+:ET

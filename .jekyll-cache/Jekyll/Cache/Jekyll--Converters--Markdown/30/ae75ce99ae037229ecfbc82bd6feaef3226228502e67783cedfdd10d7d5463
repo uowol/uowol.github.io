@@ -1,0 +1,36 @@
+I"�<h2 id="todo">Todo</h2>
+<ul>
+  <li>표본공간의 분할(partition)</li>
+  <li>베이즈 공식(Bayes’ formula)</li>
+  <li>조건부 확률의 성질</li>
+</ul>
+
+<hr />
+
+<h1 id="표본공간의-분할partition">표본공간의 분할(partition)</h1>
+
+<h3 id="-정의-">[ 정의 ]</h3>
+
+<ul>
+  <li>
+    <p>$B_1, B_2, \cdots, B_n$ 이 서로 배반</p>
+  </li>
+  <li>
+    <p>$\Omega = \bigcup_{i=1}^n B_i$</p>
+  </li>
+</ul>
+
+<p>일 때, $\{B_1, B_2, \cdots, B_n\}$ 를 <strong>표본공간 $\Omega$ 의 분할</strong>이라고 합니다.</p>
+
+<p><br /></p>
+
+<h3 id="-전확률-법칙-">[ 전확률 법칙 ]</h3>
+
+<p>$\{B_1, B_2, \cdots, B_n\}$ 이 표본공간 의 분할인 경우,</p>
+
+\[P(A)=\sum_{i=1}^n P(A\vert B_i)P(B_i)\]
+
+<p>이 성립하고 이를 전확률 법칙이라고 합니다.</p>
+
+<p style="text-align:center;"><img src="/assets/imgs/post_60/그림1.png" alt="그림1" width="600" /></p>
+:ET
